@@ -1,5 +1,7 @@
 # 電極棋局 Electrode Gambit
 
+**[開啟主持機](https://weipingwang1995.github.io/biomicrofluidic-board-game/)**
+
 生物微流體課程的教育桌遊。每位玩家經營一片 EWOD 晶片，用答題賺來的電荷，把液滴一路送到光學檢測站。
 
 - **人數**：5 人，另需 1 位主持人（也可以由其中一人兼任，但會看到答案）
@@ -12,7 +14,7 @@
 ## 快速開始
 
 1. 列印 [`print/electrode-gambit-prototype.pdf`](print/electrode-gambit-prototype.pdf)，並準備 5 色棋子。
-2. 開啟主持機（見[開啟主持機](#開啟主持機)）。
+2. 開啟[主持機](https://weipingwang1995.github.io/biomicrofluidic-board-game/)。
 3. 在開局畫面輸入姓名、按「抽籤換座位」，再按「開始遊戲」。
 4. 照[每回合流程](#每回合流程)一直按下去，6 回合後主持機會顯示排名和題目回顧。
 
@@ -65,9 +67,9 @@
 
 ## 開啟主持機
 
-**在電腦上**：下載這個儲存庫，雙擊 `index.html` 就能用瀏覽器開啟。
+**線上開啟**：手機或電腦打開 https://weipingwang1995.github.io/biomicrofluidic-board-game/ 就能用，不用安裝。第一次連線後，同一台裝置斷網也能開，建議上課前先在主持用的裝置開一次。
 
-**要支援離線**：需要用網址開啟，例如在資料夾內執行下面的指令，再打開 `http://localhost:8000`。第一次連線後，之後斷網也能開。
+**在自己的電腦開啟**：下載這個儲存庫，雙擊 `index.html`。要離線功能的話，改在資料夾內執行下面的指令，再打開 `http://localhost:8000`。
 
 ```bash
 python -m http.server
