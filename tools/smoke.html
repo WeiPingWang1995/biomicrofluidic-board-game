@@ -1,0 +1,71 @@
+<!doctype html>
+<!-- 畫面流程冒煙測試：自動按完一整局，結果寫進 #result。#stop=階段 可停在某畫面截圖 -->
+<html lang="zh-Hant">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>smoke</title>
+<link rel="stylesheet" href="../css/style.css"></head>
+<body>
+<div id="app"></div>
+<pre id="result" hidden></pre>
+<script>try { localStorage.clear(); } catch (e) {}</script>
+<script src="../js/game-data.js"></script>
+<script src="../js/questions.js"></script>
+<script src="../js/engine.js"></script>
+<script src="../js/app.js"></script>
+<script>
+(function () {
+  const stop = location.hash.slice(1);
+  const out = document.getElementById('result');
+  const click = (act, n = 0) => { const el = document.querySelectorAll(`[data-act="${act}"]`)[n]; if (!el || el.disabled) return false; el.click(); return true; };
+  const has = (sel) => !!document.querySelector(sel);
+  const counts = { rounds: 0, steps: 0, stations: 0, detects: 0, turns: 0 };
+  try {
+    // ?mode=full 測進階版，預設測基本版
+    if (new URLSearchParams(location.search).get('mode') === 'full') click('setMode', 1);
+    // 開關要能切換，切完再切回預設
+    if (stop === 'setup') return;
+    const pressed = () => document.querySelectorAll('[data-act="toggleOption"]')[1].getAttribute('aria-pressed');
+    const before = pressed(); click('toggleOption', 1); counts.toggled = pressed() !== before; click('toggleOption', 1);
+    const basicMode = new URLSearchParams(location.search).get('mode') !== 'full';
+    click('start');
+    if (stop === 'event') return;
+    for (let guard = 0; guard < 2000; guard += 1) {
+      if (has('[data-act="toQuestion"]')) { counts.rounds += 1; click('toQuestion'); continue; }
+      if (has('[data-act="reveal"]')) { if (stop === 'question') return; click('reveal'); continue; }
+      if (has('[data-act="toggleCorrect"]')) {
+        click('toggleCorrect', 0); click('toggleCorrect', 2);
+        if (stop === 'reveal') return;
+        click('settle'); continue;
+      }
+      if (has('[data-act="detectReveal"]')) { click('detectReveal'); continue; }
+      if (has('[data-act="detectResult"]')) {
+        // 第一次檢測故意答錯，確認基本版有扣分
+        counts.detects += 1;
+        click('detectResult', counts.detects === 1 ? 1 : 0);
+        if (counts.detects === 1) counts.penaltyNote = (document.querySelector('.note')?.textContent || '').includes('扣 1 分');
+        continue;
+      }
+      if (has('[data-act="endTurn"]')) {
+        // 能走就走，能完成站點就完成，模擬主持人操作
+        if (click('station')) counts.stations += 1;
+        if (click('detect')) continue;
+        for (let i = 0; i < 5; i += 1) if (click('step')) counts.steps += 1;
+        if (stop === 'action' && counts.rounds >= 3) return;
+        counts.turns += 1;
+        click('endTurn');
+        continue;
+      }
+      if (has('table')) break;
+    }
+    if (stop === 'end') return;
+    const ok = counts.rounds === window.GAME_DATA.RULES.rounds && has('table') && counts.turns === 30 && counts.detects > 0 && counts.stations > 0 && counts.toggled && (!basicMode || counts.penaltyNote);
+    document.getElementById('app').hidden = true;
+    out.hidden = false;
+    out.textContent = (ok ? 'SMOKE OK ' : 'SMOKE FAIL ') + JSON.stringify(counts) + ' saved=' + !!localStorage.getItem('electrode-gambit-v1');
+  } catch (err) {
+    out.hidden = false;
+    out.textContent = 'SMOKE ERROR ' + err.stack;
+  }
+})();
+</script>
+</body>
+</html>

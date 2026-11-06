@@ -1,0 +1,19 @@
+<!doctype html>
+<!-- 離線檢查：要用 http 開。安裝 service worker 後列出快取內容 -->
+<html><head><meta charset="utf-8"><title>sw</title></head><body><pre id="out">waiting</pre>
+<script>
+  (async () => {
+    const out = document.getElementById('out');
+    try {
+      const reg = await navigator.serviceWorker.register('../sw.js', { scope: '../' });
+      await new Promise((done) => {
+        const sw = reg.installing || reg.waiting || reg.active;
+        if (sw.state === 'activated') return done();
+        sw.addEventListener('statechange', () => { if (sw.state === 'activated') done(); });
+      });
+      const cache = await caches.open('electrode-gambit-v3');
+      const keys = await cache.keys();
+      out.textContent = `SW OK cached=${keys.length} ` + keys.map((k) => new URL(k.url).pathname).join(' ');
+    } catch (err) { out.textContent = 'SW ERROR ' + err.message; }
+  })();
+</script></body></html>

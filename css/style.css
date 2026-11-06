@@ -1,0 +1,182 @@
+/* 視覺概念：EWOD 晶片。深色絕緣層當底，金色電極格標示進度，水色液滴代表玩家。
+   教室投影是主要場景，所以固定深色、字級放大。 */
+:root {
+  color-scheme: dark;
+  --mask: #0b2b33;
+  --mask-2: #113842;
+  --mask-3: #1b4b57;
+  --line: #2c6170;
+  --gold: #d9b45b;
+  --water: #7bd8ef;
+  --ink: #eef6f4;
+  --muted: #a4c1c0;
+  --danger: #ff8a6b;
+  --good: #93e6a5;
+  --p0: #7bd8ef;
+  --p1: #ffb25c;
+  --p2: #f58fc0;
+  --p3: #a7e36f;
+  --p4: #c6a8ff;
+  --font-display: 'LXGW WenKai TC', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+  --font-body: 'Noto Sans TC', 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+  --font-mono: 'IBM Plex Mono', Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background-color: var(--mask);
+  /* 淡淡的電極陣列底紋 */
+  background-image:
+    linear-gradient(var(--mask-2) 1px, transparent 1px),
+    linear-gradient(90deg, var(--mask-2) 1px, transparent 1px);
+  background-size: 56px 56px;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.5;
+}
+#app {
+  min-height: 100%;
+  padding-block: 14px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  max-width: 1500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+button, input, select { font: inherit; color: inherit; }
+button {
+  min-height: 46px;
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--mask-3);
+  cursor: pointer;
+}
+button:hover:not(:disabled) { border-color: var(--gold); }
+button:disabled { opacity: 0.4; cursor: not-allowed; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+button.primary { background: var(--gold); border-color: var(--gold); color: #17272b; font-weight: 700; }
+button.danger { color: var(--danger); }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.source { color: var(--muted); font-size: 0.82em; }
+
+/* 頁首：回合電極 */
+.topbar { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; justify-content: space-between; }
+.topbar h1 { margin: 0; font-family: var(--font-display); font-size: 1.6rem; color: var(--gold); letter-spacing: 0.04em; }
+.rounds { display: flex; gap: 6px; align-items: center; }
+.pad {
+  width: 36px; height: 36px; display: grid; place-items: center;
+  border: 1px solid var(--line); border-radius: 3px;
+  font-family: var(--font-mono); color: var(--muted);
+}
+.pad.done { background: var(--mask-3); }
+.pad.now { background: var(--gold); border-color: var(--gold); color: #17272b; font-weight: 600; }
+.phase { color: var(--muted); }
+.phase b { color: var(--ink); }
+
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 340px); gap: 14px; flex: 1; align-items: start; }
+.stage {
+  min-width: 0;
+  background: var(--mask-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: clamp(16px, 2.4vw, 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.stage h2 { margin: 0; font-family: var(--font-display); font-size: clamp(1.7rem, 3.2vw, 2.6rem); line-height: 1.25; text-wrap: balance; }
+.eyebrow { color: var(--gold); font-size: 0.9rem; letter-spacing: 0.08em; }
+.lead { font-size: clamp(1.2rem, 2.2vw, 1.7rem); margin: 0; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+/* 題目 */
+.question { font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.35; margin: 0; text-wrap: pretty; }
+.options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.option {
+  display: flex; gap: 12px; align-items: center;
+  min-width: 0; padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: 6px;
+  background: var(--mask);
+  font-size: clamp(1.1rem, 2vw, 1.55rem);
+}
+.option .letter { flex: none; font-family: var(--font-mono); font-weight: 600; color: var(--gold); font-size: 1.15em; }
+.option.right { border-color: var(--good); background: #17463a; }
+.option.wrong { opacity: 0.5; }
+.why { margin: 0; font-size: clamp(1.05rem, 1.8vw, 1.4rem); }
+.timer { font-family: var(--font-mono); font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 600; color: var(--water); line-height: 1; }
+.timer.low { color: var(--danger); }
+
+/* 玩家勾選 */
+.pick { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+.pick button { display: flex; align-items: center; gap: 10px; text-align: left; }
+.pick button[aria-pressed='true'] { background: #17463a; border-color: var(--good); }
+
+/* 計分板 */
+.board-list { display: flex; flex-direction: column; gap: 8px; }
+.player {
+  min-width: 0;
+  background: var(--mask-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 2px 10px;
+  align-items: center;
+}
+.player.active { border-color: var(--gold); box-shadow: inset 0 0 0 1px var(--gold); }
+.dot { width: 22px; height: 22px; border-radius: 50%; background: var(--c); box-shadow: inset -3px -3px 5px rgba(0, 0, 0, 0.25); }
+.player .name { font-weight: 700; overflow-wrap: anywhere; }
+.player .score { font-family: var(--font-mono); font-size: 1.6rem; font-weight: 600; color: var(--gold); }
+.player .meta { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 2px 12px; color: var(--muted); font-size: 0.92rem; align-items: center; }
+.life { letter-spacing: 1px; color: var(--water); font-family: var(--font-mono); }
+.life.low { color: var(--danger); }
+.adjust { grid-column: 1 / -1; display: flex; gap: 6px; }
+.adjust button { min-height: 34px; padding: 0 12px; }
+
+/* 行動 */
+.steps { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.chip { padding: 3px 12px; border: 1px solid var(--line); border-radius: 999px; }
+.chip.done { background: var(--mask-3); color: var(--muted); text-decoration: line-through; }
+.chip.next { border-color: var(--gold); color: var(--gold); font-weight: 700; }
+.note { min-height: 1.6em; margin: 0; color: var(--water); }
+.note.bad { color: var(--danger); }
+.stepbar { display: flex; gap: 6px; }
+.stepbar .pad { width: 44px; height: 44px; }
+.stepbar .pad.used { background: var(--water); border-color: var(--water); color: #17272b; }
+.stepbar .pad.risk { border-color: var(--danger); color: var(--danger); }
+.stepbar .pad.used.risk { background: var(--danger); color: #17272b; }
+
+/* 設定畫面 */
+.setup-table { display: flex; flex-direction: column; gap: 8px; }
+.setup-row { display: grid; grid-template-columns: auto minmax(110px, 1.1fr) repeat(3, minmax(120px, 1fr)); gap: 8px; align-items: center; }
+.setup-row.basic { grid-template-columns: auto minmax(0, 1fr); }
+.options { display: grid; gap: 8px; }
+.option-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.option-row button { min-width: 64px; }
+.setup-row input, .setup-row select { min-height: 44px; width: 100%; padding: 6px 10px; background: var(--mask); border: 1px solid var(--line); border-radius: 6px; }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; }
+th, td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+th { color: var(--muted); font-weight: 500; }
+td.num { font-family: var(--font-mono); text-align: right; }
+
+/* 答對時液滴攤開的動畫 */
+@keyframes spread { from { transform: scale(0.97); } 60% { transform: scale(1.015); } to { transform: scale(1); } }
+.option.right { animation: spread 0.5s ease-out; }
+@media (prefers-reduced-motion: reduce) { .option.right { animation: none; } }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .options { grid-template-columns: minmax(0, 1fr); }
+  .setup-row { grid-template-columns: auto minmax(0, 1fr); }
+  .setup-row select { grid-column: 1 / -1; }
+  body { font-size: 16px; }
+}

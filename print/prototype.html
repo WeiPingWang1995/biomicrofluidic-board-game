@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>電極棋局 試玩印刷稿</title>
+<style>
+  /* 第一頁棋盤 A3，其餘 A4。這是試玩用草稿，美術定稿前先印來測規則 */
+  @page { size: A4 portrait; margin: 8mm; }
+  @page board { size: A3 portrait; margin: 8mm; }
+  * { box-sizing: border-box; }
+  :root { --line: #33525a; --gold: #b98a22; --ink: #142a30; }
+  body { margin: 0; color: var(--ink); font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; font-size: 11pt; line-height: 1.45; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  section { break-after: page; }
+  section:last-child { break-after: auto; }
+  h2 { margin: 0 0 3mm; font-size: 15pt; }
+  .board-page { page: board; }
+  .board { display: grid; grid-template-columns: repeat(9, 1fr); gap: 1.4mm; width: 277mm; height: 277mm; margin: 0 auto; }
+  .cell { border: 0.4mm solid var(--line); background: #f2e6c6; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-size: 11pt; font-weight: 700; padding: 1mm; }
+  .cell small { font-weight: 400; font-size: 8.5pt; }
+  .cell.start { color: #fff; }
+  .cell.REA { background: #bfe6c8; } .cell.MIX { background: #ffd28a; } .cell.EP { background: #c5d8fb; }
+  .cell.DEP { background: #e0c9fb; } .cell.SPL { background: #fbc9dc; } .cell.DET { background: #9fe3ee; }
+  .legend { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1mm 6mm; width: 277mm; margin: 4mm auto 0; font-size: 10pt; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2mm; }
+  .card { height: 62mm; border: 0.3mm dashed #777; padding: 3mm; display: flex; flex-direction: column; gap: 1.5mm; break-inside: avoid; overflow: hidden; }
+  .card b { font-size: 12pt; }
+  .card .src { margin-top: auto; font-size: 8.5pt; color: #51666b; }
+  .card .kind { font-size: 8.5pt; color: var(--gold); letter-spacing: 0.08em; }
+  .cards.answers { grid-template-columns: repeat(4, 1fr); }
+  .answer { align-items: center; justify-content: center; height: 42mm; font-size: 40pt; font-weight: 700; }
+  ol.sheet { margin: 0; padding-left: 8mm; font-size: 9.5pt; columns: 2; column-gap: 7mm; }
+  ol.sheet li { break-inside: avoid; margin-bottom: 1.5mm; }
+  ol.sheet em { font-style: normal; color: #51666b; }
+  .rule p, .rule li { margin: 0 0 1.2mm; }
+  .rule ol, .rule ul { padding-left: 6mm; margin: 0 0 3mm; }
+  table { border-collapse: collapse; width: 100%; font-size: 10pt; margin-bottom: 3mm; }
+  th, td { border: 0.2mm solid #889; padding: 1mm 2mm; text-align: left; }
+</style>
+</head>
+<body>
+<div id="out"></div>
+<script src="../js/game-data.js"></script>
+<script src="../js/questions.js"></script>
+<script src="../js/engine.js"></script>
+<script>
+  const { RULES, BOARD, STATIONS, MISSIONS, ROLES, CHIPS, EVENTS, BASIC, OPTIONS } = window.GAME_DATA;
+  const onOff = (value) => (value ? '開' : '關');
+  const optionText = (mode) => `<p><b>可選規則</b>：開局在主持機設定，遊戲開始後不改。檢測答錯 −${RULES.detectFailPenalty} 分（預設${onOff(OPTIONS[mode].failPenalty)}）；全場第一個完成檢測 +${RULES.firstDetectBonus} 分（預設${onOff(OPTIONS[mode].firstBonus)}）。</p>`;
+  const E = window.GAME_ENGINE;
+  const colors = ['#2f9fbf', '#d9822b', '#cf4f90', '#5f9e2e', '#7d5bd0'];
+  const size = BOARD.size;
+
+  // 棋盤：起點和站點之外都是一般電極格
+  function boardHtml() {
+    let cells = '';
+    for (let row = 0; row < size; row += 1) {
+      for (let col = 0; col < size; col += 1) {
+        const seat = BOARD.starts.findIndex((s) => s.row === row && s.col === col);
+        const station = BOARD.stations.find((s) => s.row === row && s.col === col);
+        if (seat >= 0) cells += `<div class="cell start" style="background:${colors[seat]}">起點 ${seat + 1}<small>Reservoir</small></div>`;
+        else if (station) cells += `<div class="cell ${station.type}">${STATIONS[station.type].name}<small>${STATIONS[station.type].en}</small></div>`;
+        else cells += '<div class="cell"></div>';
+      }
+    }
+    const legend = Object.values(STATIONS).map((s) => `<div><b>${s.name}</b> ⚡${s.cost}｜${s.teach}</div>`).join('');
+    return `<section class="board-page"><div class="board">${cells}</div><div class="legend">${legend}</div></section>`;
+  }
+
+  const cardsPage = (title, items) => `<section><h2>${title}</h2><div class="cards">${items.join('')}</div></section>`;
+  const card = (kind, name, body, src) => `<div class="card"><span class="kind">${kind}</span><b>${name}</b><span>${body}</span><span class="src">${src || ''}</span></div>`;
+
+  const rules = `<section class="rule"><h2>電極棋局 進階版規則</h2>
+    <p><b>目標</b>：在 ${RULES.rounds} 回合內把液滴送過任務上的站點，最後到光學檢測站，分數最高的人獲勝。</p>
+    <p><b>開局</b>：抽籤決定座位，每人選角色、晶片架構和絕緣層，液滴放在自己的起點。路線較長的玩家開局會多拿電荷。</p>
+    <p><b>每回合</b></p>
+    <ol><li>事件：主持機翻事件卡，全體收入 ${RULES.baseIncome} 電荷。</li>
+    <li>共同題：看題 ${RULES.timers.question} 秒，全員同時舉 A 到 D 答案卡。答對 +${RULES.correctIncome} 電荷、+${RULES.correctScore} 分。</li>
+    <li>行動：依序每人約 ${RULES.timers.action} 秒，可以走格、完成一站、修絕緣層。</li></ol>
+    <p><b>移動</b>：只能上下左右。一回合最多 5 格，液滴不能停在別人所在的格子，站點例外。</p>
+    <table><tr><th>第幾格</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+    <tr><td>薄絕緣層電荷</td>${CHIPS.insulator.thin.stepCost.map((c) => `<td>${c}</td>`).join('')}</tr>
+    <tr><td>厚絕緣層電荷</td>${CHIPS.insulator.thick.stepCost.map((c) => `<td>${c}</td>`).join('')}</tr></table>
+    <p><b>崩潰檢定</b>：薄絕緣層從第 4 格開始，厚絕緣層從第 5 格開始。擲出 1 或 2 就少 1 點絕緣層。歸零時下回合暫停一次，並恢復 1 點。修復每點 ${RULES.repairCost} 電荷。</p>
+    <p><b>站點</b>：走到任務的下一站，付電荷完成，每回合一站。檢測站要答對檢測題，答錯下回合可再付費重試。</p>
+    <p><b>計分</b>：中途站 ${RULES.stationScore} 分，完成檢測 ${RULES.detectScore} 分，共同題答對 ${RULES.correctScore} 分。完成任務後立刻抽下一張。同分比答對題數。</p>
+    ${optionText('full')}
+    <p><b>規則和課程的對應</b>：第 4、5 格變貴代表接觸角飽和（1103 p9），崩潰檢定代表介電崩潰（p8），薄絕緣層省電但易壞代表 V 正比 √d、崩潰電壓正比 d（p6、p8）。</p></section>`;
+
+  // 基本版規則：數字都從遊戲資料和引擎算出來，改規則時不會對不上
+  const basicMission = MISSIONS.find((m) => m.id === BASIC.mission);
+  const thick = CHIPS.insulator[BASIC.insulator];
+  const seatRows = BOARD.starts.map((s, i) => {
+    const bonus = E.routeBonus(i, BASIC.mission);
+    return `<tr><td>起點 ${i + 1}</td><td>${E.routeLength(s, basicMission.steps)}</td><td>${bonus}</td><td>${RULES.startCharge + bonus}</td></tr>`;
+  }).join('');
+  const basicRules = `<section class="rule"><h2>電極棋局 基本版規則</h2>
+    <p><b>目標</b>：全員做「${basicMission.name}」，${RULES.rounds} 回合後分數最高的人獲勝。固定封閉式、厚絕緣層，沒有角色和事件卡。</p>
+    <p><b>開局</b>：抽籤決定座位。每人絕緣層 ${thick.life} 點、分數 0，開局電荷由主持機計算：</p>
+    <table><tr><th>起點</th><th>最短步數</th><th>補償電荷</th><th>開局電荷</th></tr>${seatRows}</table>
+    <p><b>每回合</b></p>
+    <ol><li>基本收入：全體 +${RULES.baseIncome} 電荷。</li>
+    <li>共同題：看題 ${RULES.timers.question} 秒，全員同時舉 A 到 D 答案卡。答對再 +${RULES.correctIncome} 電荷、+${RULES.correctScore} 分，答錯不加。</li>
+    <li>行動：依序每人約 ${RULES.timers.action} 秒，可以走格、完成一站、修絕緣層。</li></ol>
+    <p><b>移動</b>：只能上下左右，一回合最多 5 格。多顆液滴可以停在同一格。</p>
+    <table><tr><th>當回合第幾格</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+    <tr><td>電荷</td>${thick.stepCost.map((c) => `<td>${c}</td>`).join('')}</tr></table>
+    <p><b>崩潰檢定</b>：走第 ${thick.checkFrom} 格時擲骰，電荷付了這一格一定走得到。擲出 1 或 2 就少 1 點絕緣層。歸零時下回合暫停一次，並恢復 1 點。修復每點 ${RULES.repairCost} 電荷。</p>
+    <p><b>站點</b>：依序完成${basicMission.steps.map((s) => `${STATIONS[s].name}（${STATIONS[s].cost} 電荷）`).join(' → ')}，每回合一站。檢測站要答對檢測題，答錯下回合可再付費重試。完成後從目前位置再做一次同一張任務。</p>
+    <p><b>計分</b>：中途站 ${RULES.stationScore} 分，完成檢測 ${RULES.detectScore} 分，共同題答對 ${RULES.correctScore} 分。同分並列第一，要分勝負時由主持人加賽一題搶答。</p>
+    ${optionText('basic')}</section>`;
+
+  const answers = [];
+  for (let seat = 0; seat < 5; seat += 1) ['A', 'B', 'C', 'D'].forEach((L) => answers.push(`<div class="card answer" style="color:${colors[seat]}">${L}</div>`));
+
+  const chipCards = [...Object.values(CHIPS.arch), ...Object.values(CHIPS.insulator)].map((c) => card('晶片', c.name, c.effect, c.source));
+  const roleCards = ROLES.map((r) => card('角色', r.name, r.power, r.source));
+  const basicCards = [card('任務', basicMission.name, basicMission.steps.map((s) => STATIONS[s].name).join(' → '), basicMission.source)];
+  const missionCards = MISSIONS.map((m) => card('任務', m.name, m.steps.map((s) => STATIONS[s].name).join(' → '), m.source));
+  const eventCards = EVENTS.map((e) => card('事件', e.name, `${e.text}<br><small>${e.why}</small>`, e.source));
+
+  // 備援題本：手機壞掉時主持人照念
+  const sheet = `<section><h2>備援題本（主持人用，第一個選項是答案，念的時候自己換順序）</h2><ol class="sheet">${window.QUESTIONS.map((q) => `<li>${q.q}<br><b>${q.a[0]}</b>；<em>${q.a.slice(1).join('／')}（${q.lec} ${q.page}）</em></li>`).join('')}</ol></section>`;
+
+  document.getElementById('out').innerHTML = boardHtml() + basicRules
+    + cardsPage('答案卡（兩個版本共用，每列一組，共 5 組）', answers).replace('class="cards"', 'class="cards answers"')
+    + cardsPage('基本版任務卡', basicCards)
+    + rules
+    + cardsPage('進階版：角色與晶片卡', [...roleCards, ...chipCards])
+    + cardsPage('進階版：任務卡', missionCards)
+    + cardsPage('進階版：事件卡（備援用）', eventCards)
+    + sheet;
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<!doctype html>
+<!-- 手機寬度檢查：把冒煙頁放進 400px 寬的框，量是否有橫向捲動 -->
+<html><head><meta charset="utf-8"><title>narrow</title></head>
+<body style="margin:0">
+<iframe id="f" src="smoke.html#action" style="width:400px;height:880px;border:0"></iframe>
+<pre id="out"></pre>
+<script>
+  document.getElementById('f').addEventListener('load', () => setTimeout(() => {
+    const doc = document.getElementById('f').contentDocument;
+    const wide = [...doc.querySelectorAll('#app *')].filter((el) => el.getBoundingClientRect().right > 400.5).map((el) => el.tagName + '.' + el.className).slice(0, 8);
+    document.getElementById('out').textContent = `WIDTH scroll=${doc.documentElement.scrollWidth} over=${JSON.stringify(wide)}`;
+  }, 300));
+</script>
+</body></html>

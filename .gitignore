@@ -1,0 +1,2 @@
+# 線上預覽是建置產物，用 tools/build-preview.js 重建
+dist/
