@@ -374,7 +374,7 @@
       <p class="muted">${basic ? '全員做葡萄糖比色檢測，固定封閉式、厚絕緣層，沒有角色和事件卡。' : '輸入姓名，角色每人一個。架構和絕緣層由玩家自己選，選擇本身就是工程取捨。'}</p>
       <div class="setup-table">${rows}</div>
       <h3 style="margin:0">可選計分規則</h3>
-      <div class="options">${optionRow('failPenalty', `檢測答錯 −${RULES.detectFailPenalty} 分`)}${optionRow('firstBonus', `全場第一個完成檢測 +${RULES.firstDetectBonus} 分`)}</div>
+      <div class="rule-options">${optionRow('failPenalty', `檢測答錯 −${RULES.detectFailPenalty} 分`)}${optionRow('firstBonus', `全場第一個完成檢測 +${RULES.firstDetectBonus} 分`)}</div>
       <p class="muted">開局時決定，遊戲開始後不能改。</p>
       ${duplicate ? '<p class="note bad">有角色重複，每人要選不同角色。</p>' : ''}
       <div class="actions">

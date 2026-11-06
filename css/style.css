@@ -158,7 +158,7 @@ button.danger { color: var(--danger); }
 .setup-table { display: flex; flex-direction: column; gap: 8px; }
 .setup-row { display: grid; grid-template-columns: auto minmax(110px, 1.1fr) repeat(3, minmax(120px, 1fr)); gap: 8px; align-items: center; }
 .setup-row.basic { grid-template-columns: auto minmax(0, 1fr); }
-.options { display: grid; gap: 8px; }
+.rule-options { display: grid; gap: 8px; }
 .option-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .option-row button { min-width: 64px; }
 .setup-row input, .setup-row select { min-height: 44px; width: 100%; padding: 6px 10px; background: var(--mask); border: 1px solid var(--line); border-radius: 6px; }

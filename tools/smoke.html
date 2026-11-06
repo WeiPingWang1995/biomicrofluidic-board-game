@@ -36,7 +36,7 @@
         if (stop === 'reveal') return;
         click('settle'); continue;
       }
-      if (has('[data-act="detectReveal"]')) { click('detectReveal'); continue; }
+      if (has('[data-act="detectReveal"]')) { if (stop === 'detect') return; click('detectReveal'); continue; }
       if (has('[data-act="detectResult"]')) {
         // 第一次檢測故意答錯，確認基本版有扣分
         counts.detects += 1;
