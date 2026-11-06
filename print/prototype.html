@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>電極棋局 試玩印刷稿</title>
 <style>
-  /* 第一頁棋盤 A3，其餘 A4。這是試玩用草稿，美術定稿前先印來測規則 */
+  /* 第一頁棋盤 A3，其餘 A4 */
   @page { size: A4 portrait; margin: 8mm; }
   @page board { size: A3 portrait; margin: 8mm; }
   * { box-sizing: border-box; }
@@ -14,13 +14,15 @@
   section:last-child { break-after: auto; }
   h2 { margin: 0 0 3mm; font-size: 15pt; }
   .board-page { page: board; }
-  .board { display: grid; grid-template-columns: repeat(9, 1fr); grid-template-rows: repeat(9, 1fr); gap: 1.4mm; width: 277mm; height: 277mm; margin: 0 auto; }
-  .cell { border: 0.4mm solid var(--line); background: #f2e6c6; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-size: 11pt; font-weight: 700; padding: 1mm; }
-  .cell small { font-weight: 400; font-size: 8.5pt; }
-  .cell.start { color: #fff; }
-  .cell.REA { background: #bfe6c8; } .cell.MIX { background: #ffd28a; } .cell.EP { background: #c5d8fb; }
-  .cell.DEP { background: #e0c9fb; } .cell.SPL { background: #fbc9dc; } .cell.DET { background: #9fe3ee; }
-  .legend { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1mm 6mm; width: 277mm; margin: 4mm auto 0; font-size: 10pt; }
+  /* 棋盤是一片晶片：格子連成流道，只有中途站是純色，起點用形狀 */
+  .board { display: grid; grid-template-columns: repeat(9, 1fr); grid-template-rows: repeat(9, 1fr); width: 277mm; height: 277mm; margin: 0 auto; background: #fff; }
+  .cell { position: relative; border: 0.15mm solid #9dbcc4; background: #eaf3f5; }
+  .cell svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .cell.station { border: 0.5mm solid #fff; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-size: 12.5pt; font-weight: 700; padding: 1mm; line-height: 1.25; }
+  .cell.station small { font-weight: 400; font-size: 8.5pt; }
+  .cell.start { background: #fff; border: 0; }
+  .legend { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5mm 6mm; width: 277mm; margin: 4mm auto 0; font-size: 10pt; }
+  .legend i { display: inline-block; width: 4mm; height: 4mm; margin-right: 1.5mm; vertical-align: -0.6mm; }
   .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2mm; }
   .card { height: 62mm; border: 0.3mm dashed #777; padding: 3mm; display: flex; flex-direction: column; gap: 1.5mm; break-inside: avoid; overflow: hidden; }
   .card b { font-size: 12pt; }
@@ -29,11 +31,30 @@
   /* 答題板：一張 A4 分四格，全桌共用，玩家把答題旗放進格子 */
   .answer-board { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2mm; height: 263mm; }
   .answer-cell { border: 0.6mm solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 150pt; font-weight: 700; color: var(--line); }
-  /* 答題旗：沿中線對折就能立在格子裡 */
+  /* 棋子：圓形好剪，顏色、底紋和中間的形狀三者對應同一位玩家 */
+  .tokens { display: grid; grid-template-columns: repeat(5, 1fr); justify-items: center; gap: 3mm; margin-bottom: 3mm; }
+  .token { width: 26mm; height: 26mm; }
+  .token svg, .flag svg { display: block; width: 100%; height: 100%; }
+  /* 答題旗：沿中線對折就能立在格子裡，上半部反過來印 */
   .flags { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3mm; }
-  .flag { height: 70mm; color: #fff; display: flex; flex-direction: column; font-size: 12pt; font-weight: 700; text-align: center; }
-  .flag span { flex: 1; display: flex; align-items: center; justify-content: center; }
-  .flag span:first-child { border-top: 0.4mm dashed #fff; transform: rotate(180deg); }
+  .flag { height: 74mm; }
+  /* 主持人小卡：顏色對應主題，說明時用標題快速定位 */
+  .host { font-size: 10.6pt; line-height: 1.45; }
+  .host h2 { font-size: 17pt; margin: 0; }
+  .host .lead { margin: 0.8mm 0 2mm; }
+  .host .band { margin: 0 0 1.6mm; padding: 0.7mm 2.5mm; color: #fff; font-size: 11pt; font-weight: 700; }
+  .host .block { margin-bottom: 2mm; break-inside: avoid; }
+  .host .block p, .host .block ul { margin: 0 0 0.8mm; }
+  .host ul { padding-left: 4.5mm; }
+  .host table { font-size: 10pt; margin-bottom: 1mm; }
+  .host th, .host td { padding: 0.8mm 1.5mm; }
+  .host .values { display: grid; grid-template-columns: 1fr 1fr 0.72fr; gap: 2mm; margin-bottom: 2mm; }
+  .host .value { border: 0.4mm solid var(--c); padding: 0 2mm 1.4mm; }
+  .host .value h3 { margin: 0 -2mm 1mm; padding: 0.6mm 2mm; background: var(--c); color: #fff; font-size: 11pt; }
+  .host .value p { margin: 0 0 0.8mm; }
+  .host .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; }
+  .host .formula { font-size: 10.5pt; font-weight: 700; }
+  .host .mark { display: inline-block; width: 4.4mm; height: 4.4mm; vertical-align: -0.9mm; margin-right: 1mm; }
   ol.sheet { margin: 0; padding-left: 8mm; font-size: 9.5pt; columns: 2; column-gap: 7mm; }
   ol.sheet li { break-inside: avoid; margin-bottom: 1.5mm; }
   ol.sheet em { font-style: normal; color: #51666b; }
@@ -56,19 +77,85 @@
   const colors = ['#2f9fbf', '#d9822b', '#cf4f90', '#5f9e2e', '#7d5bd0'];
   const size = BOARD.size;
 
-  // 棋盤：起點和站點之外都是一般電極格
+  // 中途站的純色，和棋盤圖例共用
+  const stationColors = { REA: '#2e9465', MIX: '#d97f14', EP: '#2c68c4', DEP: '#7346bd', SPL: '#c93f77', DET: '#0b8ba0' };
+
+  // 每位玩家的形狀，座標都在 100×100 的框內
+  const shapes = [
+    '<circle cx="50" cy="50" r="46"/>',
+    '<polygon points="50,5 97,92 3,92"/>',
+    '<polygon points="50,3 97,50 50,97 3,50"/>',
+    '<polygon points="27,7 73,7 96,50 73,93 27,93 4,50"/>',
+    '<polygon points="50,3 62,37 98,37 69,59 80,95 50,73 20,95 31,59 2,37 38,37"/>',
+  ];
+  const shapeNames = ['圓形', '三角形', '菱形', '六邊形', '星形'];
+  const patternNames = ['水波', '電流', '液滴', '電極', '斜紋'];
+
+  // 底紋：水波、電流鋸齒、液滴圓點、電極方格、斜紋
+  const patternMarks = [
+    '<path d="M0 10q5-7 10 0t10 0" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2"/>',
+    '<path d="M0 14L5 6l5 8 5-8 5 8" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2"/>',
+    '<circle cx="5" cy="5" r="2.6" fill="#fff" fill-opacity=".6"/><circle cx="15" cy="15" r="2.6" fill="#fff" fill-opacity=".6"/>',
+    '<path d="M0 0H20M0 0V20" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2"/>',
+    '<path d="M-5 5L5-5M0 20L20 0M15 25L25 15" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2.4"/>',
+  ];
+  const patternDefs = `<svg width="0" height="0" style="position:absolute"><defs>${colors.map((c, i) => `<pattern id="fill${i}" width="20" height="20" patternUnits="userSpaceOnUse"><rect width="20" height="20" fill="${c}"/>${patternMarks[i]}</pattern>`).join('')}</defs></svg>`;
+  const mark = (seat) => `<svg class="mark" viewBox="0 0 100 100"><g fill="url(#fill${seat})">${shapes[seat]}</g></svg>`;
+
+  // 同一格永遠畫出同樣的圖，重印不會變
+  const hash = (row, col) => {
+    const x = Math.sin(row * 127.1 + col * 311.7) * 43758.5453;
+    return Math.floor((x - Math.floor(x)) * 100000);
+  };
+
+  // 流道：每格兩條四分之一圓，接點都在邊的中央，所以相鄰格子會自動連成水路
+  const channelPaths = [
+    'M50 0A50 50 0 0 1 0 50M50 100A50 50 0 0 1 100 50',
+    'M50 0A50 50 0 0 0 100 50M50 100A50 50 0 0 0 0 50',
+  ];
+  const ink = 'fill="#fff" stroke="#2a6673" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"';
+  const icons = {
+    droplet: `<path ${ink} d="M50 33C50 33 39 47 39 55a11 11 0 0 0 22 0C61 47 50 33 50 33Z"/>`,
+    pipette: `<g transform="rotate(40 50 50)"><rect ${ink} x="44" y="27" width="12" height="11" rx="4"/><rect ${ink} x="46" y="38" width="8" height="24"/><path ${ink} d="M46 62h8l-4 11Z"/></g>`,
+    cuvette: `<rect ${ink} x="41" y="32" width="18" height="36"/><rect x="42.2" y="50" width="15.6" height="16.8" fill="#58b7c9"/><path d="M29 50H71" stroke="#c99a2e" stroke-width="2.4" stroke-dasharray="4 3"/>`,
+    flask: `<path ${ink} d="M45 32h10M47 32v13L36 65a4 4 0 0 0 3.5 6h21a4 4 0 0 0 3.5-6L53 45V32Z"/><path d="M41.5 60h17l3 6h-23Z" fill="#58b7c9"/>`,
+    comb: `<g fill="none" stroke="#a97f1f" stroke-width="3" stroke-linecap="round"><path d="M34 34H66M40 34V60M50 34V60M60 34V60"/><path d="M34 66H66M45 66V42M55 66V42"/></g>`,
+  };
+  const iconNames = Object.keys(icons);
+
+  // 電流：金色導線沿流道之間的空隙穿過，中間是閃電
+  function currentMark(flip) {
+    const trace = flip ? 'M100 0L64 36M36 64L0 100' : 'M0 0L36 36M64 64L100 100';
+    const vias = flip ? [[100, 0], [0, 100]] : [[0, 0], [100, 100]];
+    return `<path d="${trace}" fill="none" stroke="#c99a2e" stroke-width="3"/>${vias.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="7" fill="#c99a2e"/>`).join('')}<path d="M55 32L39 54h10L45 68l16-22H51Z" fill="#e0b13c" stroke="#a97f1f" stroke-width="1.6" stroke-linejoin="round"/>`;
+  }
+
+  function pathTile(row, col) {
+    const h = hash(row, col);
+    const flip = h % 2;
+    const d = channelPaths[flip];
+    const kind = (h >> 1) % 6;
+    let extra = '';
+    if (kind === 1 || kind === 4) extra = currentMark(flip);
+    else if (kind === 2) extra = icons[iconNames[(h >> 4) % iconNames.length]];
+    else if (kind === 3) extra = icons.droplet;
+    return `<svg viewBox="0 0 100 100" aria-hidden="true"><path d="${d}" fill="none" stroke="#8ccbd8" stroke-width="22"/><path d="${d}" fill="none" stroke="#d8f1f5" stroke-width="17"/><path d="${d}" fill="none" stroke="#58b7c9" stroke-width="2" stroke-dasharray="7 9"/>${extra}</svg>`;
+  }
+
+  const startTile = (seat) => `<svg viewBox="0 0 100 100"><g fill="url(#fill${seat})" stroke="${colors[seat]}" stroke-width="2">${shapes[seat]}</g><text x="50" y="${seat === 1 ? 70 : 57}" text-anchor="middle" font-size="17" font-weight="700" fill="#fff" stroke="${colors[seat]}" stroke-width="5" paint-order="stroke">起點 ${seat + 1}</text></svg>`;
+
   function boardHtml() {
     let cells = '';
     for (let row = 0; row < size; row += 1) {
       for (let col = 0; col < size; col += 1) {
         const seat = BOARD.starts.findIndex((s) => s.row === row && s.col === col);
         const station = BOARD.stations.find((s) => s.row === row && s.col === col);
-        if (seat >= 0) cells += `<div class="cell start" style="background:${colors[seat]}">起點 ${seat + 1}<small>Reservoir</small></div>`;
-        else if (station) cells += `<div class="cell ${station.type}">${STATIONS[station.type].name}<small>${STATIONS[station.type].en}</small></div>`;
-        else cells += '<div class="cell"></div>';
+        if (seat >= 0) cells += `<div class="cell start">${startTile(seat)}</div>`;
+        else if (station) cells += `<div class="cell station" style="background:${stationColors[station.type]}">${STATIONS[station.type].name}<small>${STATIONS[station.type].en}</small></div>`;
+        else cells += `<div class="cell">${pathTile(row, col)}</div>`;
       }
     }
-    const legend = Object.values(STATIONS).map((s) => `<div><b>${s.name}</b> ⚡${s.cost}｜${s.teach}</div>`).join('');
+    const legend = Object.entries(STATIONS).map(([k, s]) => `<div><i style="background:${stationColors[k]}"></i><b>${s.name}</b> ⚡${s.cost}｜${s.teach}</div>`).join('');
     return `<section class="board-page"><div class="board">${cells}</div><div class="legend">${legend}</div></section>`;
   }
 
@@ -107,7 +194,7 @@
     <ol><li>基本收入：全體 +${RULES.baseIncome} 電荷。</li>
     <li>共同題：看題 ${RULES.timers.question} 秒，時間到全員同時把答題旗放到答題板的 A 到 D 格。答對再 +${RULES.correctIncome} 電荷、+${RULES.correctScore} 分，答錯不加。</li>
     <li>行動：依序每人約 ${RULES.timers.action} 秒，可以走格、完成一站、修絕緣層。</li></ol>
-    <p><b>移動</b>：只能上下左右，一回合最多 5 格。多顆液滴可以停在同一格。</p>
+    <p><b>移動</b>：只能上下左右，一回合最多 5 格。液滴不能停在別人所在的格子，可以經過；所有站點都可以重疊。</p>
     <table><tr><th>當回合第幾格</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
     <tr><td>電荷</td>${thick.stepCost.map((c) => `<td>${c}</td>`).join('')}</tr></table>
     <p><b>崩潰檢定</b>：走第 ${thick.checkFrom} 格時擲骰，電荷付了這一格一定走得到。擲出 1 或 2 就少 1 點絕緣層。歸零時下回合暫停一次，並恢復 1 點。修復每點 ${RULES.repairCost} 電荷。</p>
@@ -116,7 +203,72 @@
     ${optionText('basic')}</section>`;
 
   const answerBoard = `<section><h2>答題板（兩個版本共用，全桌 1 張）</h2><div class="answer-board">${['A', 'B', 'C', 'D'].map((L) => `<div class="answer-cell">${L}</div>`).join('')}</div></section>`;
-  const flags = `<h2 style="margin-top:6mm">答題旗（兩個版本共用，每人 1 張，剪下後沿虛線對折）</h2><div class="flags">${colors.map((c, i) => `<div class="flag" style="background:${c}"><span>起點 ${i + 1}</span><span>起點 ${i + 1}</span></div>`).join('')}</div>`;
+
+  // 棋子：顏色＋底紋＋中間的白色形狀
+  const tokenSvg = (seat) => `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="49" fill="url(#fill${seat})" stroke="#333" stroke-width=".6" stroke-dasharray="3 2"/><g transform="translate(25 25) scale(.5)" fill="#fff" stroke="${colors[seat]}" stroke-width="5">${shapes[seat]}</g></svg>`;
+  const tokens = `<h2 style="margin-top:6mm">棋子（兩個版本共用，每人 1 個，沿虛線剪下）</h2><div class="tokens">${colors.map((_, i) => `<div class="token">${tokenSvg(i)}</div>`).join('')}</div><table><tr><th>起點</th>${colors.map((_, i) => `<td>${i + 1}</td>`).join('')}</tr><tr><th>形狀</th>${shapeNames.map((n) => `<td>${n}</td>`).join('')}</tr><tr><th>底紋</th>${patternNames.map((n) => `<td>${n}</td>`).join('')}</tr></table>`;
+
+  // 答題旗：viewBox 100×200，上半部轉 180 度，對折後兩面都是正的
+  const flagHalf = (seat) => `<g transform="translate(26 18) scale(.48)" fill="#fff" stroke="${colors[seat]}" stroke-width="5">${shapes[seat]}</g><text x="50" y="84" text-anchor="middle" font-size="15" font-weight="700" fill="#fff" stroke="${colors[seat]}" stroke-width="4" paint-order="stroke">起點 ${seat + 1}</text>`;
+  const flagSvg = (seat) => `<svg viewBox="0 0 100 200"><rect width="100" height="200" fill="url(#fill${seat})"/><g transform="rotate(180 50 50)">${flagHalf(seat)}</g><g transform="translate(0 100)">${flagHalf(seat)}</g><path d="M0 100H100" stroke="#fff" stroke-width="1.4" stroke-dasharray="5 4"/></svg>`;
+  const flags = `<h2 style="margin-top:6mm">答題旗（兩個版本共用，每人 1 張，剪下後沿虛線對折）</h2><div class="flags">${colors.map((_, i) => `<div class="flag">${flagSvg(i)}</div>`).join('')}</div>`;
+
+  // 主持人小卡：順序照說明時會講的順序，開局電荷放最下面
+  const band = (color, title) => `<div class="band" style="background:${color}">${title}</div>`;
+  const hostRows = BOARD.starts.map((s, i) => {
+    const bonus = E.routeBonus(i, BASIC.mission);
+    return `<tr><td>${mark(i)}起點 ${i + 1}</td><td>${E.routeLength(s, basicMission.steps)}</td><td>${bonus}</td><td>${RULES.startCharge + bonus}</td></tr>`;
+  }).join('');
+  const hostCard = `<section class="host">
+    <h2>主持人小卡 基本版</h2>
+    <p class="lead">全員把液滴依序送過${basicMission.steps.map((k) => STATIONS[k].name).join('、')}，${RULES.rounds} 回合後分數最高的人獲勝。</p>
+
+    <div class="values">
+      <div class="value" style="--c:#b8860b"><h3>電荷＝金錢</h3>
+        <p><b>理論</b>：EWOD 靠電壓在絕緣層兩側累積電荷，接觸角變小，液滴才推得動（1103 p6）。</p>
+        <p><b>用途</b>：走格、完成站點、修絕緣層。沒花完可以留到下回合。</p></div>
+      <div class="value" style="--c:#c0392b"><h3>絕緣層＝生命</h3>
+        <p><b>理論</b>：絕緣層撐住電場。電壓太高會介電崩潰，留下損傷（1103 p8）。</p>
+        <p><b>數值</b>：開局 ${thick.life} 點。花 ${RULES.repairCost} 電荷可修 1 點，最多回到 ${thick.life} 點。</p></div>
+      <div class="value" style="--c:#6c3fb5"><h3>分數＝勝負</h3>
+        <p>${RULES.rounds} 回合後比高低，同分並列第一。</p></div>
+    </div>
+
+    <div class="block">${band('#0b8ba0', '每回合流程與收入')}
+      <table><tr><th>順序</th><th>階段</th><th>電荷</th><th>分數</th><th>主持人要做的事</th></tr>
+      <tr><td>1</td><td>基本收入</td><td>全體 +${RULES.baseIncome}</td><td></td><td>自動入帳，按「出題」</td></tr>
+      <tr><td>2</td><td>共同題</td><td>答對再 +${RULES.correctIncome}</td><td>答對 +${RULES.correctScore}</td><td>念題 ${RULES.timers.question} 秒，時間到全員同時放旗，點選答對的人</td></tr>
+      <tr><td>3</td><td>行動</td><td>走格、站點要花</td><td>完成站點得分</td><td>每人約 ${RULES.timers.action} 秒，棋子走 1 格就按 1 次</td></tr></table>
+    </div>
+
+    <div class="pair">
+      <div class="block">${band('#2c68c4', '移動與重疊')}
+        <table><tr><th>第幾格</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+        <tr><th>電荷</th>${thick.stepCost.map((c) => `<td>${c}</td>`).join('')}</tr></table>
+        <ul><li>只能上下左右，一回合最多 5 格。</li>
+        <li><b>路徑不能重疊</b>：不能停在別人所在的格子，可以經過。</li>
+        <li><b>站點可以重疊</b>：檢測站和其他站點都能多人同格。</li>
+        <li>第 4、5 格變貴，對應接觸角飽和（1103 p9）。</li></ul>
+      </div>
+      <div class="block">${band('#c0392b', '崩潰與重新檢定')}
+        <ul><li>走第 ${thick.checkFrom} 格時，主持機自動擲骰。擲出 1 或 2 扣 1 點絕緣層，這一格照樣走完。</li>
+        <li><b>每回合走第 ${thick.checkFrom} 格都要重新檢定</b>，過關不會留到下回合。</li>
+        <li>絕緣層歸零：下回合暫停一次，並恢復 1 點。</li>
+        <li><b>檢測題答錯</b>：電荷不退，下回合再付 ${STATIONS.DET.cost} 電荷，重新答一題。</li></ul>
+      </div>
+    </div>
+
+    <div class="block">${band('#2e9465', '站點與計分')}
+      <table><tr><th>站點</th><th>電荷</th><th>要答題嗎</th><th>得分</th></tr>
+      ${basicMission.steps.map((k) => `<tr><td>${STATIONS[k].name}</td><td>${STATIONS[k].cost}</td><td>${k === 'DET' ? '要答檢測題' : '不用'}</td><td>${k === 'DET' ? `答對 +${RULES.detectScore}，答錯 −${RULES.detectFailPenalty}` : `+${RULES.stationScore}`}</td></tr>`).join('')}</table>
+      <p>每回合最多完成一站。做完檢測後，從目前位置再做一次同一張任務。答錯扣分和全場第一個完成檢測 +${RULES.firstDetectBonus} 分都是可選規則，基本版預設前者開、後者關。</p>
+    </div>
+
+    <div class="block">${band('#b8860b', '開局電荷與補償電荷')}
+      <p class="formula">開局電荷 = ${RULES.startCharge} + 補償電荷　　補償電荷 = 最短步數 − ${RULES.routeBase}（最少 0，最多 ${RULES.routeBonusMax}，只算開局）</p>
+      <table><tr><th>起點</th><th>最短步數</th><th>補償電荷</th><th>開局電荷</th></tr>${hostRows}</table>
+    </div>
+  </section>`;
 
   const chipCards = [...Object.values(CHIPS.arch), ...Object.values(CHIPS.insulator)].map((c) => card('晶片', c.name, c.effect, c.source));
   const roleCards = ROLES.map((r) => card('角色', r.name, r.power, r.source));
@@ -127,9 +279,9 @@
   // 備援題本：手機壞掉時主持人照念
   const sheet = `<section><h2>備援題本（主持人用，第一個選項是答案，念的時候自己換順序）</h2><ol class="sheet">${window.QUESTIONS.map((q) => `<li>${q.q}<br><b>${q.a[0]}</b>；<em>${q.a.slice(1).join('／')}（${q.lec} ${q.page}）</em></li>`).join('')}</ol></section>`;
 
-  document.getElementById('out').innerHTML = boardHtml() + basicRules
+  document.getElementById('out').innerHTML = patternDefs + boardHtml() + basicRules + hostCard
     + answerBoard
-    + cardsPage('基本版任務卡', basicCards).replace('</section>', `${flags}</section>`)
+    + cardsPage('基本版任務卡', basicCards).replace('</section>', `${tokens}${flags}</section>`)
     + rules
     + cardsPage('進階版：角色與晶片卡', [...roleCards, ...chipCards])
     + cardsPage('進階版：任務卡', missionCards)

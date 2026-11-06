@@ -330,6 +330,7 @@
           : station ? `<button data-act="station" ${p.stationThisTurn || p.charge < cost ? 'disabled' : ''}>完成${station.name}（⚡${cost}）</button>` : ''}
         <button data-act="repair" ${p.life >= p.maxLife || p.charge < E.repairCost(p) ? 'disabled' : ''}>修絕緣層（⚡${E.repairCost(p)}）</button>
       </div>
+      <p class="muted">液滴不能停在別人所在的格子，站點可以重疊。</p>
       <p class="note ${state.noteBad ? 'bad' : ''}" role="status">${esc(state.note)}</p>
       <div class="actions"><button data-act="endTurn">結束回合，下一位</button></div>`;
   }
