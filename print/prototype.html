@@ -26,8 +26,14 @@
   .card b { font-size: 12pt; }
   .card .src { margin-top: auto; font-size: 8.5pt; color: #51666b; }
   .card .kind { font-size: 8.5pt; color: var(--gold); letter-spacing: 0.08em; }
-  .cards.answers { grid-template-columns: repeat(4, 1fr); }
-  .answer { align-items: center; justify-content: center; height: 42mm; font-size: 40pt; font-weight: 700; }
+  /* 答題板：一張 A4 分四格，全桌共用，玩家把答題旗放進格子 */
+  .answer-board { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2mm; height: 263mm; }
+  .answer-cell { border: 0.6mm solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 150pt; font-weight: 700; color: var(--line); }
+  /* 答題旗：沿中線對折就能立在格子裡 */
+  .flags { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3mm; }
+  .flag { height: 70mm; color: #fff; display: flex; flex-direction: column; font-size: 12pt; font-weight: 700; text-align: center; }
+  .flag span { flex: 1; display: flex; align-items: center; justify-content: center; }
+  .flag span:first-child { border-top: 0.4mm dashed #fff; transform: rotate(180deg); }
   ol.sheet { margin: 0; padding-left: 8mm; font-size: 9.5pt; columns: 2; column-gap: 7mm; }
   ol.sheet li { break-inside: avoid; margin-bottom: 1.5mm; }
   ol.sheet em { font-style: normal; color: #51666b; }
@@ -74,7 +80,7 @@
     <p><b>開局</b>：抽籤決定座位，每人選角色、晶片架構和絕緣層，液滴放在自己的起點。路線較長的玩家開局會多拿電荷。</p>
     <p><b>每回合</b></p>
     <ol><li>事件：主持機翻事件卡，全體收入 ${RULES.baseIncome} 電荷。</li>
-    <li>共同題：看題 ${RULES.timers.question} 秒，全員同時舉 A 到 D 答案卡。答對 +${RULES.correctIncome} 電荷、+${RULES.correctScore} 分。</li>
+    <li>共同題：看題 ${RULES.timers.question} 秒，時間到全員同時把答題旗放到答題板的 A 到 D 格。答對 +${RULES.correctIncome} 電荷、+${RULES.correctScore} 分。</li>
     <li>行動：依序每人約 ${RULES.timers.action} 秒，可以走格、完成一站、修絕緣層。</li></ol>
     <p><b>移動</b>：只能上下左右。一回合最多 5 格，液滴不能停在別人所在的格子，站點例外。</p>
     <table><tr><th>第幾格</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
@@ -99,7 +105,7 @@
     <table><tr><th>起點</th><th>最短步數</th><th>補償電荷</th><th>開局電荷</th></tr>${seatRows}</table>
     <p><b>每回合</b></p>
     <ol><li>基本收入：全體 +${RULES.baseIncome} 電荷。</li>
-    <li>共同題：看題 ${RULES.timers.question} 秒，全員同時舉 A 到 D 答案卡。答對再 +${RULES.correctIncome} 電荷、+${RULES.correctScore} 分，答錯不加。</li>
+    <li>共同題：看題 ${RULES.timers.question} 秒，時間到全員同時把答題旗放到答題板的 A 到 D 格。答對再 +${RULES.correctIncome} 電荷、+${RULES.correctScore} 分，答錯不加。</li>
     <li>行動：依序每人約 ${RULES.timers.action} 秒，可以走格、完成一站、修絕緣層。</li></ol>
     <p><b>移動</b>：只能上下左右，一回合最多 5 格。多顆液滴可以停在同一格。</p>
     <table><tr><th>當回合第幾格</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
@@ -109,8 +115,8 @@
     <p><b>計分</b>：中途站 ${RULES.stationScore} 分，完成檢測 ${RULES.detectScore} 分，共同題答對 ${RULES.correctScore} 分。同分並列第一，要分勝負時由主持人加賽一題搶答。</p>
     ${optionText('basic')}</section>`;
 
-  const answers = [];
-  for (let seat = 0; seat < 5; seat += 1) ['A', 'B', 'C', 'D'].forEach((L) => answers.push(`<div class="card answer" style="color:${colors[seat]}">${L}</div>`));
+  const answerBoard = `<section><h2>答題板（兩個版本共用，全桌 1 張）</h2><div class="answer-board">${['A', 'B', 'C', 'D'].map((L) => `<div class="answer-cell">${L}</div>`).join('')}</div></section>`;
+  const flags = `<h2 style="margin-top:6mm">答題旗（兩個版本共用，每人 1 張，剪下後沿虛線對折）</h2><div class="flags">${colors.map((c, i) => `<div class="flag" style="background:${c}"><span>起點 ${i + 1}</span><span>起點 ${i + 1}</span></div>`).join('')}</div>`;
 
   const chipCards = [...Object.values(CHIPS.arch), ...Object.values(CHIPS.insulator)].map((c) => card('晶片', c.name, c.effect, c.source));
   const roleCards = ROLES.map((r) => card('角色', r.name, r.power, r.source));
@@ -122,8 +128,8 @@
   const sheet = `<section><h2>備援題本（主持人用，第一個選項是答案，念的時候自己換順序）</h2><ol class="sheet">${window.QUESTIONS.map((q) => `<li>${q.q}<br><b>${q.a[0]}</b>；<em>${q.a.slice(1).join('／')}（${q.lec} ${q.page}）</em></li>`).join('')}</ol></section>`;
 
   document.getElementById('out').innerHTML = boardHtml() + basicRules
-    + cardsPage('答案卡（兩個版本共用，每列一組，共 5 組）', answers).replace('class="cards"', 'class="cards answers"')
-    + cardsPage('基本版任務卡', basicCards)
+    + answerBoard
+    + cardsPage('基本版任務卡', basicCards).replace('</section>', `${flags}</section>`)
     + rules
     + cardsPage('進階版：角色與晶片卡', [...roleCards, ...chipCards])
     + cardsPage('進階版：任務卡', missionCards)

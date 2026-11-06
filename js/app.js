@@ -1,4 +1,4 @@
-// 主持機畫面：只有一台裝置，玩家舉 A 到 D 答案卡，主持人在這裡記錄結果。
+// 主持機畫面：只有一台裝置，玩家把答題旗放到 A 到 D 答題板，主持人在這裡記錄結果。
 (function () {
   'use strict';
 
@@ -275,7 +275,7 @@
       </div>
       <p class="question">${esc(q.q)}</p>
       ${optionList(card)}
-      <p class="muted">倒數結束後，大家同時舉起答案卡。</p>
+      <p class="muted">倒數結束後，大家同時把答題旗放到答題板上。</p>
       <div class="actions"><button class="primary" data-act="reveal">公布答案</button></div>`;
   }
 

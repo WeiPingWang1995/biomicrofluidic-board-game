@@ -11,7 +11,7 @@
         if (sw.state === 'activated') return done();
         sw.addEventListener('statechange', () => { if (sw.state === 'activated') done(); });
       });
-      const cache = await caches.open('electrode-gambit-v3');
+      const cache = await caches.open('electrode-gambit-v4');
       const keys = await cache.keys();
       out.textContent = `SW OK cached=${keys.length} ` + keys.map((k) => new URL(k.url).pathname).join(' ');
     } catch (err) { out.textContent = 'SW ERROR ' + err.message; }
