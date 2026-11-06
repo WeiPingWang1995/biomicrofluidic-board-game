@@ -33,11 +33,11 @@
   .answer-cell { border: 0.6mm solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 150pt; font-weight: 700; color: var(--line); }
   /* 棋子：圓形好剪，顏色、底紋和中間的形狀三者對應同一位玩家 */
   .tokens { display: grid; grid-template-columns: repeat(5, 1fr); justify-items: center; gap: 3mm; margin-bottom: 3mm; }
-  .token { width: 26mm; height: 26mm; }
+  .token { width: 18mm; height: 18mm; }
   .token svg, .flag svg { display: block; width: 100%; height: 100%; }
-  /* 答題旗：沿中線對折就能立在格子裡，上半部反過來印 */
-  .flags { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3mm; }
-  .flag { height: 74mm; }
+  /* 答題旗：棋盤每格約 30 mm，對折後 20×20 mm 放得進格子，上半部反過來印 */
+  .flags { display: grid; grid-template-columns: repeat(5, 20mm); justify-content: space-between; padding: 0 8mm; }
+  .flag { height: 40mm; }
   /* 主持人小卡：顏色對應主題，說明時用標題快速定位 */
   .host { font-size: 10.6pt; line-height: 1.45; }
   .host h2 { font-size: 17pt; margin: 0; }
