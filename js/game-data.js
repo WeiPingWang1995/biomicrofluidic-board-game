@@ -5,8 +5,8 @@
 
   const RULES = {
     rounds: 6,            // 固定回合數，用來把總時間鎖在 40 分鐘內
-    startCharge: 3,       // 開局電荷
-    routeBase: 9,         // 起始路線超過這個格數，每多 1 格補 1 電荷
+    startCharge: 7,       // 開局電荷；新棋盤基本版路線 12 到 13 步，全員 7 電荷最平均（模擬勝率 19.7–20.4%）
+    routeBase: 13,        // 起始路線超過這個格數，每多 1 格補 1 電荷；基本版不會觸發，進階版最長 14 步
     routeBonusMax: 5,     // 路線補償上限
     baseIncome: 2,        // 每回合基本收入
     correctIncome: 2,     // 共同題答對的額外電荷
