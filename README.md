@@ -1,6 +1,6 @@
 # 電極棋局 Electrode Gambit
 
-**[開啟主持機](https://weipingwang1995.github.io/biomicrofluidic-board-game/)**
+**[開啟主持機](https://weipingwang1995.github.io/biomicrofluidic-board-game/)**　｜　**[原理短片](https://weipingwang1995.github.io/biomicrofluidic-board-game/videos.html)**
 
 生物微流體課程的教育桌遊。每位玩家經營一片 EWOD 晶片，用答題賺來的電荷，把液滴一路送到光學檢測站。
 
@@ -143,6 +143,13 @@ python -m http.server
 
 正解會標亮，並顯示解說和講義頁碼。點選答對的玩家，再按「結算，進入行動」。
 
+點開錯誤選項可以看為什麼錯；有影片的題目會多一顆「Watch the video」按鈕。目前有兩支（英文，直式）：
+
+- [液滴怎麼切成兩顆](https://weipingwang1995.github.io/biomicrofluidic-board-game/videos/droplet-splitting.mp4)（1:08，L8-17）
+- [折疊路徑為什麼混得快](https://weipingwang1995.github.io/biomicrofluidic-board-game/videos/folding-mixing.mp4)（1:36，L8-23）
+
+全部影片也整理在[原理短片頁](https://weipingwang1995.github.io/biomicrofluidic-board-game/videos.html)，玩家可以自己用手機看。
+
 ### 4. 行動
 
 ![行動階段](docs/images/05-action.png)
@@ -213,6 +220,7 @@ python -m http.server
 - `js/engine.js`：規則引擎。`js/app.js`：主持機畫面。
 - `print/prototype.html`：印刷稿原始檔，用瀏覽器列印成 PDF。
 - `docs/images/`：這份說明的截圖。
+- `videos/`、`videos.html`：原理短片（NotebookLM 產生）與給玩家的影片清單。
 - `TODO.md`：待修清單。
 
 ### 檢查
