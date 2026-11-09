@@ -23,27 +23,28 @@
   // 棋盤大小與座標：row、col 都從 0 開始
   const BOARD = {
     size: 9,
-    // 位置由 tools/layout-search.js 搜尋：每張任務 5 個起點的最短路線最多差 2 格，葡萄糖任務全部一樣長
+    // 位置由 tools/layout-search.js 搜尋。混合環在正中央，試劑站、分裂站在中央區，
+    // 電泳站、介電泳站、檢測站靠近邊緣；葡萄糖任務 5 個起點路線最多差 1 格
     starts: [
-      { row: 1, col: 0 },
+      { row: 0, col: 0 },
       { row: 0, col: 7 },
-      { row: 5, col: 8 },
-      { row: 8, col: 5 },
-      { row: 7, col: 0 },
+      { row: 4, col: 8 },
+      { row: 8, col: 2 },
+      { row: 5, col: 0 },
     ],
     stations: [
-      { type: 'MIX', row: 2, col: 2 },
-      { type: 'REA', row: 4, col: 3 },
-      { type: 'REA', row: 2, col: 8 },
-      { type: 'EP', row: 8, col: 2 },
-      { type: 'EP', row: 2, col: 5 },
-      { type: 'DEP', row: 4, col: 0 },
-      { type: 'DEP', row: 4, col: 6 },
-      { type: 'SPL', row: 6, col: 4 },
-      { type: 'SPL', row: 0, col: 4 },
-      { type: 'DET', row: 0, col: 1 },
-      { type: 'DET', row: 6, col: 1 },
-      { type: 'DET', row: 8, col: 7 },
+      { type: 'MIX', row: 4, col: 4 },
+      { type: 'REA', row: 2, col: 3 },
+      { type: 'REA', row: 6, col: 5 },
+      { type: 'SPL', row: 3, col: 6 },
+      { type: 'SPL', row: 5, col: 2 },
+      { type: 'EP', row: 3, col: 1 },
+      { type: 'EP', row: 1, col: 8 },
+      { type: 'DEP', row: 1, col: 5 },
+      { type: 'DEP', row: 8, col: 0 },
+      { type: 'DET', row: 8, col: 8 },
+      { type: 'DET', row: 7, col: 3 },
+      { type: 'DET', row: 5, col: 7 },
     ],
   };
 

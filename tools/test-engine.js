@@ -19,15 +19,17 @@ test('基本版：全員葡萄糖、封閉式、厚層 4 點，沒有角色和�
     assert.strictEqual(p.missionId, 'glucose'); assert.strictEqual(p.arch, 'closed');
     assert.strictEqual(p.insulator, 'thick'); assert.strictEqual(p.life, 4); assert.strictEqual(p.role, 'none');
   });
-  assert.deepStrictEqual(g.players.map((p) => p.charge), [6, 6, 6, 6, 6]);
+  assert.deepStrictEqual(g.players.map((p) => p.charge), [6, 7, 6, 6, 7]);
 });
 test('基本版：每回合 +2，答對再 +2 電荷 +2 分，答錯不加', () => {
   const g = E.createGame(players(), fixed, 'basic');
+  // 開局電荷依座位不同，所以用增量比較
+  const start = g.players.map((p) => p.charge);
   E.startRound(g); assert.strictEqual(E.eventOf(g), null);
-  assert.strictEqual(g.players[0].charge, 8);
+  assert.strictEqual(g.players[0].charge, start[0] + 2);
   E.settleQuestion(g, [0]);
-  assert.strictEqual(g.players[0].charge, 10); assert.strictEqual(g.players[0].score, 2);
-  assert.strictEqual(g.players[1].charge, 8); assert.strictEqual(g.players[1].score, 0);
+  assert.strictEqual(g.players[0].charge, start[0] + 4); assert.strictEqual(g.players[0].score, 2);
+  assert.strictEqual(g.players[1].charge, start[1] + 2); assert.strictEqual(g.players[1].score, 0);
 });
 test('基本版：移動電荷 1、1、1、2、3，第 5 格才檢定', () => {
   const g = E.createGame(players(), fixed, 'basic'); E.startRound(g);

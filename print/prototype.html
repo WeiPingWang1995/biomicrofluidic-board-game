@@ -16,11 +16,11 @@
   .board-page { page: board; }
   /* 棋盤是一片晶片：格子連成流道，只有中途站是純色，起點用形狀 */
   .board { display: grid; grid-template-columns: repeat(9, 1fr); grid-template-rows: repeat(9, 1fr); width: 277mm; height: 277mm; margin: 0 auto; background: #fff; }
-  .cell { position: relative; border: 0.15mm solid #9dbcc4; background: #eaf3f5; }
+  .cell { position: relative; border: 0.15mm solid #a9cde0; background: #d9ecf6; }
   .cell svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
   .cell.station { border: 0.5mm solid #fff; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-size: 12.5pt; font-weight: 700; padding: 1mm; line-height: 1.25; }
   .cell.station small { font-weight: 400; font-size: 8.5pt; }
-  .cell.start { background: #fff; border: 0; }
+  .cell.start { background: #d9ecf6; }
   .legend { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5mm 6mm; width: 277mm; margin: 4mm auto 0; font-size: 10pt; }
   .legend i { display: inline-block; width: 4mm; height: 4mm; margin-right: 1.5mm; vertical-align: -0.6mm; }
   .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2mm; }
@@ -115,31 +115,19 @@
   ];
   const ink = 'fill="#fff" stroke="#2a6673" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"';
   const icons = {
-    droplet: `<path ${ink} d="M50 33C50 33 39 47 39 55a11 11 0 0 0 22 0C61 47 50 33 50 33Z"/>`,
+    flask: `<path ${ink} d="M45 32h10M47 32v13L36 65a4 4 0 0 0 3.5 6h21a4 4 0 0 0 3.5-6L53 45V32Z"/><path d="M41.5 60h17l3 6h-23Z" fill="#4ba3cc"/>`,
     pipette: `<g transform="rotate(40 50 50)"><rect ${ink} x="44" y="27" width="12" height="11" rx="4"/><rect ${ink} x="46" y="38" width="8" height="24"/><path ${ink} d="M46 62h8l-4 11Z"/></g>`,
-    cuvette: `<rect ${ink} x="41" y="32" width="18" height="36"/><rect x="42.2" y="50" width="15.6" height="16.8" fill="#58b7c9"/><path d="M29 50H71" stroke="#c99a2e" stroke-width="2.4" stroke-dasharray="4 3"/>`,
-    flask: `<path ${ink} d="M45 32h10M47 32v13L36 65a4 4 0 0 0 3.5 6h21a4 4 0 0 0 3.5-6L53 45V32Z"/><path d="M41.5 60h17l3 6h-23Z" fill="#58b7c9"/>`,
-    comb: `<g fill="none" stroke="#a97f1f" stroke-width="3" stroke-linecap="round"><path d="M34 34H66M40 34V60M50 34V60M60 34V60"/><path d="M34 66H66M45 66V42M55 66V42"/></g>`,
+    droplet: `<path ${ink} d="M50 33C50 33 39 47 39 55a11 11 0 0 0 22 0C61 47 50 33 50 33Z"/>`,
+    bolt: '<path d="M55 30L38 55h11L44 70l18-25H51Z" fill="#e0b13c" stroke="#a97f1f" stroke-width="1.8" stroke-linejoin="round"/>',
+    tube: `<path ${ink} d="M44 30h12M45.5 30V64a4.5 4.5 0 0 0 9 0V30"/><path d="M46.7 52h6.6v12a3.3 3.3 0 0 1-6.6 0Z" fill="#4ba3cc"/>`,
   };
-  const iconNames = Object.keys(icons);
-
-  // 電流：金色導線沿流道之間的空隙穿過，中間是閃電
-  function currentMark(flip) {
-    const trace = flip ? 'M100 0L64 36M36 64L0 100' : 'M0 0L36 36M64 64L100 100';
-    const vias = flip ? [[100, 0], [0, 100]] : [[0, 0], [100, 100]];
-    return `<path d="${trace}" fill="none" stroke="#c99a2e" stroke-width="3"/>${vias.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="7" fill="#c99a2e"/>`).join('')}<path d="M55 32L39 54h10L45 68l16-22H51Z" fill="#e0b13c" stroke="#a97f1f" stroke-width="1.6" stroke-linejoin="round"/>`;
-  }
+  // 圖案輪流排：(col + 3×row) 除以 7 的餘數決定，上下左右相鄰的格子不會出現同一種，五種圖案數量也接近
+  const iconCycle = ['flask', 'pipette', null, 'droplet', 'bolt', null, 'tube'];
 
   function pathTile(row, col) {
-    const h = hash(row, col);
-    const flip = h % 2;
-    const d = channelPaths[flip];
-    const kind = (h >> 1) % 6;
-    let extra = '';
-    if (kind === 1 || kind === 4) extra = currentMark(flip);
-    else if (kind === 2) extra = icons[iconNames[(h >> 4) % iconNames.length]];
-    else if (kind === 3) extra = icons.droplet;
-    return `<svg viewBox="0 0 100 100" aria-hidden="true"><path d="${d}" fill="none" stroke="#8ccbd8" stroke-width="22"/><path d="${d}" fill="none" stroke="#d8f1f5" stroke-width="17"/><path d="${d}" fill="none" stroke="#58b7c9" stroke-width="2" stroke-dasharray="7 9"/>${extra}</svg>`;
+    const d = channelPaths[hash(row, col) % 2];
+    const icon = iconCycle[(col + 3 * row) % 7];
+    return `<svg viewBox="0 0 100 100" aria-hidden="true"><path d="${d}" fill="none" stroke="#93c6df" stroke-width="22"/><path d="${d}" fill="none" stroke="#eef8fd" stroke-width="17"/><path d="${d}" fill="none" stroke="#4ba3cc" stroke-width="2" stroke-dasharray="7 9"/>${icon ? icons[icon] : ''}</svg>`;
   }
 
   const startTile = (seat) => `<svg viewBox="0 0 100 100"><g fill="url(#fill${seat})" stroke="${colors[seat]}" stroke-width="2">${shapes[seat]}</g><text x="50" y="${seat === 1 ? 70 : 57}" text-anchor="middle" font-size="17" font-weight="700" fill="#fff" stroke="${colors[seat]}" stroke-width="5" paint-order="stroke">起點 ${seat + 1}</text></svg>`;
