@@ -6,7 +6,7 @@
 - [x] 五題加上答對圖片、錯誤選項說明，公布後點錯誤選項可展開
 - [x] 分裂（L8-17）、摺疊混合（L8-23）兩支影片：放進 `videos/`、填 `video` 欄位、加進 `sw.js`（v10）、做 `videos.html`
 - [x] 擊穿影片（L8-07）：`videos/dielectric-breakdown.mp4`，`sw.js` 升到 v11
-- [ ] 還缺 L8-01（EWOD 接觸角）、L8-15（液滴移動）兩支影片
+- [x] L8-01（`videos/contact-angle.mp4`）、L8-15（`videos/droplet-moving.mp4`）兩支影片，`sw.js` 升到 v12
 - [ ] 第 6 回合和檢測題還是中文，沒有圖片和影片
 - [ ] 題庫縮減（討論中的方案：共同 6＋最終 5＋備選 5，共 16 題）；題目用完時免答題完成檢測
 - [ ] 印刷備援題本、README、Notion 規則頁同步
