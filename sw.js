@@ -1,10 +1,10 @@
 // 離線快取：第一次連上網路後，教室斷網也能開
-const CACHE = 'electrode-gambit-v10';
+const CACHE = 'electrode-gambit-v11';
 const FILES = [
   './', 'index.html', 'css/style.css', 'js/game-data.js', 'js/questions.js', 'js/engine.js', 'js/app.js',
   'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png',
   'images/questions/L8-01.svg', 'images/questions/L8-15.svg', 'images/questions/L8-07.svg', 'images/questions/L8-17.svg', 'images/questions/L8-23.svg',
-  'videos.html', 'videos/droplet-splitting.mp4', 'videos/folding-mixing.mp4',
+  'videos.html', 'videos/dielectric-breakdown.mp4', 'videos/droplet-splitting.mp4', 'videos/folding-mixing.mp4',
 ];
 
 self.addEventListener('install', (event) => {

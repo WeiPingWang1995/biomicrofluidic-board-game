@@ -143,8 +143,9 @@ python -m http.server
 
 正解會標亮，並顯示解說和講義頁碼。點選答對的玩家，再按「結算，進入行動」。
 
-點開錯誤選項可以看為什麼錯；有影片的題目會多一顆「Watch the video」按鈕。目前有兩支（英文，直式）：
+點開錯誤選項可以看為什麼錯；有影片的題目會多一顆「Watch the video」按鈕。目前有三支（英文，直式）：
 
+- [崩潰電壓怎麼毀掉電潤濕](https://weipingwang1995.github.io/biomicrofluidic-board-game/videos/dielectric-breakdown.mp4)（1:19，L8-07）
 - [液滴怎麼切成兩顆](https://weipingwang1995.github.io/biomicrofluidic-board-game/videos/droplet-splitting.mp4)（1:08，L8-17）
 - [折疊路徑為什麼混得快](https://weipingwang1995.github.io/biomicrofluidic-board-game/videos/folding-mixing.mp4)（1:36，L8-23）
 
