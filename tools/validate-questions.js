@@ -16,8 +16,10 @@ QUESTIONS.forEach((item) => {
   if (new Set(item.a).size !== 4) problems.push(`${item.id} 選項重複`);
   if (![1, 2, 3].includes(item.diff)) problems.push(`${item.id} 難度錯誤`);
   if (item.a.some((text) => /以上皆|皆非/.test(text))) problems.push(`${item.id} 有以上皆是類選項`);
-  if (item.q.length > 60) problems.push(`${item.id} 題目太長（${item.q.length} 字）`);
-  if (item.a.some((text) => text.length > 30)) problems.push(`${item.id} 選項太長，投影不好讀`);
+  // 英文字母數比中文字數多，長度上限另外算
+  if (item.q.length > (item.en ? 120 : 60)) problems.push(`${item.id} 題目太長（${item.q.length} 字）`);
+  if (item.a.some((text) => text.length > (item.en ? 70 : 30))) problems.push(`${item.id} 選項太長，投影不好讀`);
+  if (item.en && (!Array.isArray(item.wrong) || item.wrong.length !== 3)) problems.push(`${item.id} 錯誤說明不是 3 段`);
   if (item.a[0].length === Math.max(...item.a.map((t) => t.length))) longestCorrect += 1;
   count(item.lec, byLecture);
   count(item.diff, byDiff);

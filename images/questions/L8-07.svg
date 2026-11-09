@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" font-family="Helvetica,Arial,sans-serif"><rect width="640" height="300" rx="10" fill="#113842"/>
+<!-- 電流對電壓：到崩潰電壓前幾乎沒電流，之後急升 -->
+<text x="320" y="36" font-size="18" font-weight="700" fill="#eef6f4" text-anchor="middle">Breakdown voltage: the limit of the insulator</text>
+<path d="M90 56 V246 H590" fill="none" stroke="#a4c1c0" stroke-width="2"/>
+<text x="340" y="278" font-size="15" fill="#a4c1c0" text-anchor="middle">Voltage across the insulator</text><text x="60" y="150" font-size="15" fill="#a4c1c0" text-anchor="middle" transform="rotate(-90 60 150)">Leakage current</text>
+<path d="M90 240 C260 238 380 236 430 232 C446 200 452 110 462 64" fill="none" stroke="#ff8a6b" stroke-width="4"/>
+<path d="M430 56 V246" stroke="#d9b45b" stroke-width="2" stroke-dasharray="6 5"/>
+<text x="424" y="96" font-size="16" font-weight="700" fill="#d9b45b" text-anchor="end">Breakdown voltage</text>
+<text x="250" y="222" font-size="15" fill="#eef6f4" text-anchor="middle">Insulator blocks current</text>
+<text x="478" y="130" font-size="15" fill="#eef6f4">Insulator fails,</text><text x="478" y="150" font-size="15" fill="#eef6f4">often permanently</text>
+</svg>

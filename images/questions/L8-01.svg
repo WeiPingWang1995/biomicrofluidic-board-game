@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" font-family="Helvetica,Arial,sans-serif"><rect width="640" height="300" rx="10" fill="#113842"/>
+<!-- 左：0 V 接觸角大；右：通電後接觸角小 -->
+<g font-size="17" fill="#eef6f4" text-anchor="middle"><text x="165" y="36" font-weight="700">V = 0: large contact angle</text><text x="475" y="36" font-weight="700">Voltage on: small contact angle</text></g>
+<rect x="30" y="196" width="270" height="10" fill="#d9e8e4"/><rect x="30" y="206" width="270" height="20" fill="#2c6170"/><rect x="30" y="226" width="270" height="16" fill="#6b7a7a"/>
+<rect x="340" y="196" width="270" height="10" fill="#d9e8e4"/><rect x="340" y="206" width="270" height="20" fill="#2c6170"/><rect x="340" y="226" width="270" height="16" fill="#d9b45b"/>
+<path d="M115 196 A74 74 0 1 1 215 196 Z" fill="#7bd8ef"/>
+<path d="M375 196 A128 128 0 0 1 575 196 Z" fill="#7bd8ef"/>
+<path d="M153 196 A38 38 0 0 0 96 166" fill="none" stroke="#ffb25c" stroke-width="3"/><text x="134" y="182" fill="#0b2b33" font-size="20" font-weight="700">θ</text>
+<path d="M425 196 A50 50 0 0 0 414 164" fill="none" stroke="#ffb25c" stroke-width="3"/><text x="432" y="188" fill="#0b2b33" font-size="20" font-weight="700">θ</text>
+<g font-size="14" fill="#a4c1c0"><text x="30" y="262">Hydrophobic layer / insulator / electrode (off)</text><text x="340" y="262" fill="#d9b45b">Electrode on</text></g>
+<text x="320" y="288" font-size="16" fill="#eef6f4" text-anchor="middle">cos θ rises with V², so θ falls and the droplet spreads</text>
+</svg>

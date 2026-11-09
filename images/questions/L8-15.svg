@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" font-family="Helvetica,Arial,sans-serif"><rect width="640" height="300" rx="10" fill="#113842"/>
+<!-- 液滴跨在兩格電極上，右格通電，液滴往右 -->
+<text x="320" y="36" font-size="18" font-weight="700" fill="#eef6f4" text-anchor="middle">The droplet moves toward the energized electrode</text>
+<g font-size="16" font-weight="700" text-anchor="middle"><rect x="60" y="200" width="170" height="26" fill="#6b7a7a"/><rect x="235" y="200" width="170" height="26" fill="#d9b45b"/><rect x="410" y="200" width="170" height="26" fill="#6b7a7a"/><text x="145" y="219" fill="#eef6f4">OFF</text><text x="320" y="219" fill="#0b2b33">ON</text><text x="495" y="219" fill="#eef6f4">OFF</text></g>
+<path d="M112 196 C92 120 130 92 180 92 C240 92 280 140 308 196 Z" fill="#7bd8ef"/>
+<path d="M330 148 H420" stroke="#ffb25c" stroke-width="6"/><path d="M420 134 L446 148 L420 162 Z" fill="#ffb25c"/>
+<g font-size="15" fill="#eef6f4" text-anchor="middle"><text x="145" y="74">Large contact angle</text><text x="345" y="112">Small contact angle</text></g>
+<text x="320" y="264" font-size="16" fill="#eef6f4" text-anchor="middle">Different angles at the two ends create a capillary pressure difference</text>
+</svg>

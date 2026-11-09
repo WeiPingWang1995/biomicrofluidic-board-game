@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" font-family="Helvetica,Arial,sans-serif"><rect width="640" height="300" rx="10" fill="#113842"/>
+<!-- 分裂三階段：左右通電、中間斷開 -->
+<text x="320" y="36" font-size="18" font-weight="700" fill="#eef6f4" text-anchor="middle">Splitting: both sides on, middle off (top view)</text>
+<g font-size="13" font-weight="700" text-anchor="middle">
+<g id="p"><rect x="24" y="214" width="58" height="22" fill="#d9b45b"/><rect x="86" y="214" width="58" height="22" fill="#6b7a7a"/><rect x="148" y="214" width="58" height="22" fill="#d9b45b"/><text x="53" y="230" fill="#0b2b33">ON</text><text x="115" y="230" fill="#eef6f4">OFF</text><text x="177" y="230" fill="#0b2b33">ON</text></g>
+<use href="#p" x="202"/><use href="#p" x="404"/></g>
+<ellipse cx="115" cy="130" rx="78" ry="52" fill="#7bd8ef"/>
+<path d="M240 130 C240 86 296 88 316 112 C322 118 330 118 336 112 C356 88 412 86 412 130 C412 174 356 172 336 148 C330 142 322 142 316 148 C296 172 240 174 240 130 Z" fill="#7bd8ef"/>
+<ellipse cx="482" cy="130" rx="46" ry="44" fill="#7bd8ef"/><ellipse cx="584" cy="130" rx="46" ry="44" fill="#7bd8ef"/>
+<g font-size="15" fill="#eef6f4" text-anchor="middle"><text x="115" y="264">1. Stretch</text><text x="326" y="264">2. Neck</text><text x="530" y="264">3. Pinch off</text></g>
+</svg>

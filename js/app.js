@@ -39,7 +39,8 @@
   // 選題：依回合決定難度，優先挑出現次數最少的週次，讓題目涵蓋各週
   function pickQuestion(game, diffs) {
     const used = new Set(state.log.map((entry) => entry.id));
-    const pool = QUESTIONS.filter((q) => !used.has(q.id));
+    // 固定題保留給指定回合，不讓隨機抽題先用掉
+    const pool = QUESTIONS.filter((q) => !used.has(q.id) && !RULES.fixedQuestions.includes(q.id));
     const byDiff = pool.filter((q) => diffs.includes(q.diff));
     const candidates = byDiff.length ? byDiff : pool.length ? pool : QUESTIONS;
     const seen = {};
@@ -52,8 +53,8 @@
   const roundDiffs = (round) => (round <= 2 ? [1] : round <= 4 ? [2] : [2, 3]);
 
   function makeCard(question) {
-    const options = E.shuffle(question.a.map((text, index) => ({ text, right: index === 0 })), Math.random);
-    return { id: question.id, options, revealed: false, correct: [] };
+    const options = E.shuffle(question.a.map((text, index) => ({ text, right: index === 0, note: index > 0 && question.wrong ? question.wrong[index - 1] : '' })), Math.random);
+    return { id: question.id, options, revealed: false, correct: [], openWrong: null };
   }
   const questionOf = (card) => QUESTIONS.find((q) => q.id === card.id);
 
@@ -97,7 +98,9 @@
     },
     toQuestion() {
       state.game.phase = 'question';
-      state.card = makeCard(pickQuestion(state.game, roundDiffs(state.game.round)));
+      const fixedId = RULES.fixedQuestions[state.game.round - 1];
+      const fixed = fixedId && QUESTIONS.find((q) => q.id === fixedId);
+      state.card = makeCard(fixed || pickQuestion(state.game, roundDiffs(state.game.round)));
       startTimer(RULES.timers.question);
     },
     reveal() {
@@ -111,6 +114,14 @@
       const at = list.indexOf(seat);
       if (at >= 0) list.splice(at, 1); else list.push(seat);
     },
+    // 主持人點桌上有旗子的錯誤選項，顯示那個選項的說明
+    openWrong(el) {
+      const card = state.detect ? state.detect.card : state.card;
+      const index = Number(el.dataset.index);
+      card.openWrong = card.openWrong === index ? null : index;
+    },
+    openVideo(el) { state.video = el.dataset.src; },
+    closeVideo() { state.video = null; },
     settle() {
       const q = questionOf(state.card);
       E.settleQuestion(state.game, state.card.correct);
@@ -243,10 +254,35 @@
   }
 
   function optionList(card) {
-    return `<div class="options">${card.options.map((opt, i) => {
+    return `<div class="options${card.revealed ? ' revealed' : ''}">${card.options.map((opt, i) => {
       const cls = card.revealed ? (opt.right ? 'right' : 'wrong') : '';
-      return `<div class="option ${cls}"><span class="letter">${LETTERS[i]}</span><span>${esc(opt.text)}</span></div>`;
+      const body = `<span class="letter">${LETTERS[i]}</span><span>${esc(opt.text)}</span>`;
+      // 有錯誤說明的題目，公布後錯誤選項可以點開
+      if (card.revealed && opt.note) {
+        return `<button class="option ${cls} tap" data-act="openWrong" data-index="${i}" aria-pressed="${card.openWrong === i}">${body}</button>`;
+      }
+      return `<div class="option ${cls}">${body}</div>`;
     }).join('')}</div>`;
+  }
+
+  // 公布答案後的解說：正解的圖與文字；點開錯誤選項時加上說明和影片
+  function explanation(card, q) {
+    const opened = card.openWrong === null ? null : card.options[card.openWrong];
+    const hint = q.en ? (q.wrong ? 'Tap a wrong option that has a flag on it to see why it is wrong.' : '') : '';
+    return `<div class="explain">
+      ${q.img ? `<img class="explain-img" src="${esc(q.img)}" alt="${esc(q.why)}">` : ''}
+      <div class="explain-text">
+        <p class="why">${esc(q.why)} <span class="source">${esc(lectureLabel(q))}</span></p>
+        ${hint ? `<p class="muted">${esc(hint)}</p>` : ''}
+        ${opened ? `<div class="wrong-note"><b>${LETTERS[card.openWrong]}. ${esc(opened.text)}</b><p>${esc(opened.note)}</p>
+          ${q.video ? `<button class="primary" data-act="openVideo" data-src="${esc(q.video)}">Watch the video</button>` : ''}</div>` : ''}
+      </div>
+    </div>`;
+  }
+
+  function videoOverlay() {
+    return `<div class="video-overlay"><video src="${esc(state.video)}" controls autoplay playsinline></video>
+      <button class="primary" data-act="closeVideo">Close</button></div>`;
   }
 
   function eventStage() {
@@ -284,9 +320,9 @@
     const q = questionOf(card);
     const bonus = RULES.correctIncome + (((E.eventOf(state.game) || {}).mods || {}).correctBonus || 0);
     return `<div class="eyebrow">對答案 · 答對 +${bonus} 電荷、+${RULES.correctScore} 分</div>
-      <p class="question">${esc(q.q)}</p>
+      <p class="question compact">${esc(q.q)}</p>
       ${optionList(card)}
-      <p class="why">${esc(q.why)} <span class="source">${esc(lectureLabel(q))}</span></p>
+      ${explanation(card, q)}
       <div><div class="muted" style="margin-bottom:6px">點選答對的玩家</div>
       <div class="pick">${state.game.players.map((p) => `<button data-act="toggleCorrect" data-seat="${p.seat}" aria-pressed="${card.correct.includes(p.seat)}"><span class="dot" style="--c:var(--p${p.seat})"></span>${esc(p.name)}</button>`).join('')}</div></div>
       <div class="actions"><button class="primary" data-act="settle">結算，進入行動</button></div>`;
@@ -345,7 +381,7 @@
       </div>
       <p class="question">${esc(q.q)}</p>
       ${optionList(card)}
-      ${card.revealed ? `<p class="why">${esc(q.why)} <span class="source">${esc(lectureLabel(q))}</span></p>
+      ${card.revealed ? `${explanation(card, q)}
         <div class="actions"><button class="primary" data-act="detectResult" data-right="1">答對</button><button data-act="detectResult" data-right="0">答錯</button></div>`
         : '<div class="actions"><button class="primary" data-act="detectReveal">公布答案</button></div>'}`;
   }
@@ -414,7 +450,7 @@
       const stage = state.detect ? detectStage() : stages[state.game.phase]();
       html += `<div class="layout"><section class="stage">${stage}</section>${sidebar()}</div>`;
     }
-    app.innerHTML = html;
+    app.innerHTML = html + (state.video ? videoOverlay() : '');
     tick();
   }
 
