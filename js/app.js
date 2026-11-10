@@ -249,7 +249,8 @@
       reveal: ['Answer', '對答案'],
       action: ['Action', '行動'],
     };
-    const phase = game && names[game.phase];
+    // 結算畫面不再顯示行動階段
+    const phase = state.screen === 'end' ? ['Game over', '遊戲結束'] : game && names[game.phase];
     return `<header class="topbar">
       <h1>Electrode Gambit <span class="zh">電極棋局</span></h1>
       ${game ? `<div class="rounds" aria-label="Round ${game.round} of ${RULES.rounds}">${pads(game)}</div>

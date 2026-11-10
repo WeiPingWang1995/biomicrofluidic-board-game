@@ -15,8 +15,6 @@ Players use a physical board, tokens, an answer board and answer flags on the ta
 
 The host app is **English-first with Chinese translations**. Buttons read “English 中文” (for example “Show question 出題”). Questions, options, explanations and event cards show English with smaller Chinese text below. Both shared questions and detection (individual) questions are bilingual.
 
-> The screenshots below still show the older Chinese-only interface. The buttons are in the same places; only the text is now bilingual.
-
 ## Quick start
 
 1. Print [`print/electrode-gambit-prototype.pdf`](print/electrode-gambit-prototype.pdf) and cut out the tokens and answer flags.
@@ -42,6 +40,10 @@ The host app is **English-first with Chinese translations**. Buttons read “Eng
 | Host device | 1 | Phone, tablet or computer | Yes | Yes |
 
 The printed cards and rule pages are in Chinese; the backup question sheet is bilingual. Rule summaries are on PDF page 2 (Basic) and page 6 (Advanced).
+
+![Host card](docs/images/host-card.png)
+
+![Board](docs/images/board.png)
 
 ## How the pieces work
 
@@ -100,6 +102,8 @@ The first player moves back one seat each round; the app handles it. Rounds 1–
 
 ## Setup
 
+![Setup screen](docs/images/01-setup.png)
+
 1. Choose **Basic** or **Advanced**.
 2. Enter the 5 player names. The dot color on the left is the start color, top to bottom = start 1 to 5.
 3. Press **Shuffle seats** to assign starts at random.
@@ -112,15 +116,21 @@ Each player puts their token on their start cell and takes the matching answer f
 
 ### 1. Round start
 
+![Round start](docs/images/02-event.png)
+
 Base income is added automatically. The scoreboard on the right shows each player’s score (top right), charge (⚡), insulator (●) and next station.
 
 On this screen, **−1 ⚡** / **+1 ⚡** fix charge, for example after a mis-tap or a dice event. Press **Show question** to continue.
 
 ### 2. Shared question
 
+![Shared question](docs/images/03-question.png)
+
 The host reads the question and players think during the countdown. When time is up, everyone places their flag, and the host presses **Reveal answer**. The timer is only a reminder; it does not advance automatically.
 
 ### 3. Answer
+
+![Answer](docs/images/04-reveal.png)
 
 The correct option lights up with an explanation and the lecture page. Tap the players who were correct, then press **Settle and go to actions**.
 
@@ -135,6 +145,8 @@ Tap a wrong option to see why it is wrong. Questions with a video show a **Watch
 All videos are also on the [videos page](https://weipingwang1995.github.io/biomicrofluidic-board-game/videos.html) for players to watch on their phones.
 
 ### 4. Action
+
+![Action](docs/images/05-action.png)
 
 The screen shows whose turn it is, mission progress and remaining steps. The player says what they want to do and the host presses:
 
@@ -153,12 +165,16 @@ The screen shows whose turn it is, mission progress and remaining steps. The pla
 
 ### 5. Detection question
 
+![Detection question](docs/images/06-detect.png)
+
 Only the current player answers, with a 25-second timer. The host presses **Reveal answer**, then **Correct** or **Wrong**.
 
 - **Correct**: +4 points and the mission is complete. In Basic, repeat the same mission from the current cell; in Advanced, draw the next one.
 - **Wrong**: no refund; pay 1 charge next turn to retry. Basic also takes away 1 point by default.
 
 ## Game end
+
+![Game end](docs/images/07-end.png)
 
 After round 6 the app shows the ranking plus every question’s answer, how many got it right and the lecture page, ready for review. Press **New game** to return to setup. To stop early, press **End game** on the right.
 
@@ -229,8 +245,6 @@ In Basic, ties share first place; the host can ask one buzzer question to break 
 玩家在桌上用實體棋盤、棋子、答題板和答題旗，主持人用一台手機或電腦操作主持機。主持機負責出題、倒數和記錄電荷、分數，**但不知道棋子在哪一格**，走到哪裡要看桌上的棋盤。
 
 主持機介面**以英文為主、附中文翻譯**：按鈕寫成「英文 中文」（例如「Show question 出題」），題目、選項、解說和事件卡都是英文在上、中文小字在下。共同題和檢測題（個人題）都已經是英中對照。下面說明裡提到的按鈕名稱是中文那一半。
-
-> 說明裡的截圖還是舊的中文介面，按鈕位置相同，只是文字改成英中對照。
 
 ## 快速開始
 
