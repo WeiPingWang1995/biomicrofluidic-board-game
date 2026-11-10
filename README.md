@@ -1,4 +1,221 @@
-# 電極棋局 Electrode Gambit
+# Electrode Gambit 電極棋局
+
+**English** ｜ [中文說明](#電極棋局中文說明)
+
+**[Open the host app](https://weipingwang1995.github.io/biomicrofluidic-board-game/)**　｜　**[Concept videos](https://weipingwang1995.github.io/biomicrofluidic-board-game/videos.html)**　｜　**[Print PDF](print/electrode-gambit-prototype.pdf)**
+
+An educational board game for a biomicrofluidics course. Each player runs an EWOD chip and spends the charge they earn by answering questions to move a droplet all the way to the absorbance detection station.
+
+- **Players**: 5, plus 1 host (a player can host, but will see the answers)
+- **Time**: 6 rounds, about 35 minutes (not yet confirmed by playtesting)
+- **Type**: resource-management board game with quiz questions
+- **Versions**: Basic (everyone has the same mission; play this first) and Advanced (adds roles, chip choices and event cards)
+
+Players use a physical board, tokens, an answer board and answer flags on the table. The host runs the host app on one phone or computer. The app asks questions, runs timers and tracks charge and score, **but it does not know where the tokens are** — check the board on the table for that.
+
+The host app is **English-first with Chinese translations**. Buttons read “English 中文” (for example “Show question 出題”). Questions, options, explanations and event cards show English with smaller Chinese text below. Both shared questions and detection (individual) questions are bilingual.
+
+> The screenshots below still show the older Chinese-only interface. The buttons are in the same places; only the text is now bilingual.
+
+## Quick start
+
+1. Print [`print/electrode-gambit-prototype.pdf`](print/electrode-gambit-prototype.pdf) and cut out the tokens and answer flags.
+2. Open the [host app](https://weipingwang1995.github.io/biomicrofluidic-board-game/).
+3. On the setup screen, enter names, press **Shuffle seats**, then **Start game**.
+4. Follow [each round](#each-round). After 6 rounds the app shows the ranking and a question review.
+
+## Components
+
+| Item | Qty | How to prepare | Basic | Advanced |
+|---|---|---|---|---|
+| Board | 1 | PDF page 1, print on A3 | Yes | Yes |
+| Tokens | 5 | PDF page 5; cut along the dashed lines, can be stuck on coins or bottle caps | Yes | Yes |
+| Host card | 1 | PDF page 3 | Yes | Basic content for reference |
+| Answer board | 1 | PDF page 4; A4 split into A–D | Yes | Yes |
+| Answer flags | 5 | PDF page 5; cut out and fold along the dashed line | Yes | Yes |
+| Basic mission card | 1 | PDF page 5, same page as the tokens | Yes | No |
+| Role and chip cards | 9 | PDF page 7 | No | Yes |
+| Advanced mission cards | 6 | PDF page 8 | No | Yes |
+| Event cards | 12 | PDF page 9 | No | Backup only |
+| Backup question sheet | 4 pages | PDF pages 10–13 (English and Chinese) | Recommended | Recommended |
+| Die | 1 | Bring your own | No | Needed for “Droplet volume error” |
+| Host device | 1 | Phone, tablet or computer | Yes | Yes |
+
+The printed cards and rule pages are in Chinese; the backup question sheet is bilingual. Rule summaries are on PDF page 2 (Basic) and page 6 (Advanced).
+
+## How the pieces work
+
+**Tokens.** Each player’s token, start cell and answer flag share one color, pattern and shape, so they can be told apart even in black-and-white print.
+
+**Answer board and flags.** One answer board sits in the middle of the table. Each player takes the flag matching their start color; tokens stay on the board to mark droplet positions. Think of your answer during the countdown, then **everyone places their flag on A, B, C or D at the same time**. Once placed, it cannot change. The host reads the flag colors and marks who was correct in the app.
+
+**Mission cards.** A mission card lists the stations to finish in order. In Basic, everyone does the same “Glucose colorimetric assay”, so one card in the middle of the table is enough:
+
+```
+Reagent (2 charge) → Mixing ring (2 charge) → Absorbance detection (1 charge + question)
+```
+
+In Advanced, the app assigns missions and moves to the next one automatically. The host places the matching card in front of each player.
+
+**Role and chip cards (Advanced).** At setup, each player picks a unique role, a chip type (open or closed) and an insulator (thin or thick) in the app, then places the matching cards in front of them. The app applies the effects; the cards are reminders.
+
+**Event cards (Advanced).** The app draws and applies one event each round, so **the physical cards are normally not needed**. Use them only if the app is unavailable. For “Droplet volume error”, roll the die on the table, then adjust charge with the app’s ±1 buttons.
+
+## Opening the host app
+
+**Online**: open https://weipingwang1995.github.io/biomicrofluidic-board-game/ on a phone or computer. Nothing to install. After the first visit it also works offline on the same device, so open it once on the host device before class.
+
+**On your own computer**: download this repository and double-click `index.html`. For offline support, run the command below in the folder and open `http://localhost:8000`.
+
+```bash
+python -m http.server
+```
+
+Game progress is saved in the browser and survives a reload. Clearing browser data or switching browsers loses it.
+
+## Game flow
+
+```
+Setup
+   │
+   ▼
+Everyone starts with 4 charge
+   │
+   ▼
+┌─ Rounds 1 to 6 ───────────────────────────────────┐
+│  1. Round start: everyone +2 charge               │
+│     (Advanced also draws an event)                │
+│  2. Shared question: 30 s timer, flags together   │
+│  3. Answer: correct = +2 charge, +2 points        │
+│  4. Action: 5 players take turns moving/stations  │
+│        └─ at the detection station, answer a      │
+│           detection question                      │
+└───────────────────────────────────────────────────┘
+   │
+   ▼
+Ranking and question review
+```
+
+The first player moves back one seat each round; the app handles it. Rounds 1–5 use fixed demo questions (L8-01, L8-15, L8-07, L8-17, L8-23); round 6 and detection questions are drawn at random from the question bank.
+
+## Setup
+
+1. Choose **Basic** or **Advanced**.
+2. Enter the 5 player names. The dot color on the left is the start color, top to bottom = start 1 to 5.
+3. Press **Shuffle seats** to assign starts at random.
+4. Check the two optional scoring rules (see [Scoring](#scoring)).
+5. Press **Start game**. Starting charge is calculated automatically. In Basic every start route is within 1 step of the others, so everyone starts with 4 charge and no compensation. In Advanced, starts with longer routes get extra charge, and open chips get +2.
+
+Each player puts their token on their start cell and takes the matching answer flag.
+
+## Each round
+
+### 1. Round start
+
+Base income is added automatically. The scoreboard on the right shows each player’s score (top right), charge (⚡), insulator (●) and next station.
+
+On this screen, **−1 ⚡** / **+1 ⚡** fix charge, for example after a mis-tap or a dice event. Press **Show question** to continue.
+
+### 2. Shared question
+
+The host reads the question and players think during the countdown. When time is up, everyone places their flag, and the host presses **Reveal answer**. The timer is only a reminder; it does not advance automatically.
+
+### 3. Answer
+
+The correct option lights up with an explanation and the lecture page. Tap the players who were correct, then press **Settle and go to actions**.
+
+Tap a wrong option to see why it is wrong. Questions with a video show a **Watch the video** button. There are five videos (English narration, vertical), covering the round 1–5 questions:
+
+- [How voltage changes droplet shape](https://weipingwang1995.github.io/biomicrofluidic-board-game/videos/contact-angle.mp4) (1:18, L8-01)
+- [How breakdown voltage ruins electrowetting](https://weipingwang1995.github.io/biomicrofluidic-board-game/videos/dielectric-breakdown.mp4) (1:19, L8-07)
+- [How electrowetting moves droplets](https://weipingwang1995.github.io/biomicrofluidic-board-game/videos/droplet-moving.mp4) (1:22, L8-15)
+- [How electrowetting splits a droplet](https://weipingwang1995.github.io/biomicrofluidic-board-game/videos/droplet-splitting.mp4) (1:08, L8-17)
+- [How folding droplets speeds up mixing](https://weipingwang1995.github.io/biomicrofluidic-board-game/videos/folding-mixing.mp4) (1:36, L8-23)
+
+All videos are also on the [videos page](https://weipingwang1995.github.io/biomicrofluidic-board-game/videos.html) for players to watch on their phones.
+
+### 4. Action
+
+The screen shows whose turn it is, mission progress and remaining steps. The player says what they want to do and the host presses:
+
+| Player does on the table | Host presses | Notes |
+|---|---|---|
+| Moves token 1 cell up/down/left/right | **Move 1 step** | Press once per cell, up to 5 per turn. A droplet cannot stop on another droplet’s cell but can pass through; stations may overlap. With a thick insulator steps cost 1, 1, 1, 2, 3; the button shows the current cost |
+| Changes their mind | **Undo step** | Moves back 1 cell and refunds charge |
+| Token is on the next station | **Finish (station)** | 2 charge for 2 points, at most 1 station per turn |
+| Token is on the detection station | **Start detection** | 1 charge, then a detection question |
+| Wants to repair the insulator | **Repair insulator** | 2 charge for 1 point; the process engineer pays only 1 |
+| Is done this turn | **End turn, next player** | Moves to the next player |
+
+> **The host must watch the board.** The app does not check whether a token has reached a station, so confirm before pressing **Finish** or **Start detection**.
+
+**Breakdown check**: red-framed steps need a check, and the app rolls automatically each time you reach one. A roll of 1 or 2 removes 1 insulator point, but the step still happens. If the insulator reaches 0, the player skips the next turn and then recovers 1 point. In Basic, only step 5 needs a check.
+
+### 5. Detection question
+
+Only the current player answers, with a 25-second timer. The host presses **Reveal answer**, then **Correct** or **Wrong**.
+
+- **Correct**: +4 points and the mission is complete. In Basic, repeat the same mission from the current cell; in Advanced, draw the next one.
+- **Wrong**: no refund; pay 1 charge next turn to retry. Basic also takes away 1 point by default.
+
+## Game end
+
+After round 6 the app shows the ranking plus every question’s answer, how many got it right and the lecture page, ready for review. Press **New game** to return to setup. To stop early, press **End game** on the right.
+
+## Scoring
+
+| Item | Points |
+|---|---|
+| Correct shared question | +2 |
+| Finish a station | +2 |
+| Finish detection | +4 |
+
+Two optional rules are set on the setup screen and cannot change once the game starts:
+
+| Optional rule | Basic default | Advanced default |
+|---|---|---|
+| Wrong detection answer −1 point | On | Off |
+| First player to finish detection +1 point | Off | On |
+
+In Basic, ties share first place; the host can ask one buzzer question to break the tie. In Advanced, ties are broken by number of correct answers.
+
+## Troubleshooting
+
+| Situation | What to do |
+|---|---|
+| Moved one step too many | Press **Undo step** during the same player’s turn |
+| Charge recorded wrongly | Fix it with ±1 on the next round’s start screen |
+| **Move 1 step** does nothing | Not enough charge, or the turn’s steps are used up |
+| **Finish (station)** does nothing | Not enough charge, or a station was already finished this turn |
+| Phone dead or broken | Read from the backup question sheet, draw physical event cards, track charge and score on paper |
+
+## For developers
+
+**Files**
+
+- `js/game-data.js`: board, stations, missions, roles, chips, events and rule values (English in `name`/`text`, Chinese in `nameZh`/`textZh`). Start here to change rules.
+- `js/questions.js`: question bank. English in `q`/`a`/`why`/`wrong`, Chinese in `zh`. `a[0]` is the correct answer and is shuffled on display.
+- `js/engine.js`: rules engine. `js/app.js`: host app screens.
+- `print/prototype.html`: print source; print it to PDF from a browser.
+- `docs/images/`: screenshots for this README.
+- `videos/`, `videos.html`: concept videos (made with NotebookLM) and the player video list.
+- `TODO.md`: to-do list.
+
+**Checks**
+
+- `node tools/test-engine.js`: rule tests.
+- `node tools/validate-questions.js`: question bank format check (both languages).
+- `node tools/simulate.js 20000 0.6 basic`: bot games to check Basic balance; use `full` for Advanced. Balance has not been re-run since starting charge changed to 4.
+- `tools/smoke.html`: plays one Basic game automatically; add `?mode=full` for Advanced.
+- `tools/seat-analysis.js`: compares seat fairness and tie rules.
+
+**Question sources**: 1103 questions were checked page by page against the slides. Other weeks come from class notes and have not all been re-checked; review them before use.
+
+---
+
+# 電極棋局（中文說明）
+
+[English](#electrode-gambit-電極棋局) ｜ **中文**
 
 **[開啟主持機](https://weipingwang1995.github.io/biomicrofluidic-board-game/)**　｜　**[原理短片](https://weipingwang1995.github.io/biomicrofluidic-board-game/videos.html)**
 
@@ -12,6 +229,8 @@
 玩家在桌上用實體棋盤、棋子、答題板和答題旗，主持人用一台手機或電腦操作主持機。主持機負責出題、倒數和記錄電荷、分數，**但不知道棋子在哪一格**，走到哪裡要看桌上的棋盤。
 
 主持機介面**以英文為主、附中文翻譯**：按鈕寫成「英文 中文」（例如「Show question 出題」），題目、選項、解說和事件卡都是英文在上、中文小字在下。共同題和檢測題（個人題）都已經是英中對照。下面說明裡提到的按鈕名稱是中文那一半。
+
+> 說明裡的截圖還是舊的中文介面，按鈕位置相同，只是文字改成英中對照。
 
 ## 快速開始
 
@@ -148,7 +367,7 @@ python -m http.server
 
 正解會標亮，並顯示解說和講義頁碼。點選答對的玩家，再按「結算，進入行動」。
 
-點開錯誤選項可以看為什麼錯；有影片的題目會多一顆「Watch the video」按鈕。目前有五支（英文，直式），前 5 回合的英文題都有：
+點開錯誤選項可以看為什麼錯；有影片的題目會多一顆「Watch the video」按鈕。目前有五支（英文旁白，直式），前 5 回合的英文題都有：
 
 - [電壓怎麼改變液滴形狀](https://weipingwang1995.github.io/biomicrofluidic-board-game/videos/contact-angle.mp4)（1:18，L8-01）
 - [崩潰電壓怎麼毀掉電潤濕](https://weipingwang1995.github.io/biomicrofluidic-board-game/videos/dielectric-breakdown.mp4)（1:19，L8-07）
