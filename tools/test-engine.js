@@ -19,7 +19,7 @@ test('基本版：全員葡萄糖、封閉式、厚層 4 點，沒有角色和�
     assert.strictEqual(p.missionId, 'glucose'); assert.strictEqual(p.arch, 'closed');
     assert.strictEqual(p.insulator, 'thick'); assert.strictEqual(p.life, 4); assert.strictEqual(p.role, 'none');
   });
-  assert.deepStrictEqual(g.players.map((p) => p.charge), [7, 7, 7, 7, 7]);
+  assert.deepStrictEqual(g.players.map((p) => p.charge), [4, 4, 4, 4, 4]);
 });
 test('基本版：每回合 +2，答對再 +2 電荷 +2 分，答錯不加', () => {
   const g = E.createGame(players(), fixed, 'basic');

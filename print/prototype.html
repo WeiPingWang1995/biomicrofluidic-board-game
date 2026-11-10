@@ -55,7 +55,7 @@
   .host .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; }
   .host .formula { font-size: 10.5pt; font-weight: 700; }
   .host .mark { display: inline-block; width: 4.4mm; height: 4.4mm; vertical-align: -0.9mm; margin-right: 1mm; }
-  ol.sheet { margin: 0; padding-left: 8mm; font-size: 9.5pt; columns: 2; column-gap: 7mm; }
+  ol.sheet { margin: 0; padding-left: 8mm; font-size: 8.5pt; line-height: 1.3; columns: 2; column-gap: 7mm; }
   ol.sheet li { break-inside: avoid; margin-bottom: 1.5mm; }
   ol.sheet em { font-style: normal; color: #51666b; }
   .rule p, .rule li { margin: 0 0 1.2mm; }
@@ -139,11 +139,11 @@
         const seat = BOARD.starts.findIndex((s) => s.row === row && s.col === col);
         const station = BOARD.stations.find((s) => s.row === row && s.col === col);
         if (seat >= 0) cells += `<div class="cell start">${startTile(seat)}</div>`;
-        else if (station) cells += `<div class="cell station" style="background:${stationColors[station.type]}">${STATIONS[station.type].name}<small>${STATIONS[station.type].en}</small></div>`;
+        else if (station) cells += `<div class="cell station" style="background:${stationColors[station.type]}">${STATIONS[station.type].nameZh}<small>${STATIONS[station.type].name}</small></div>`;
         else cells += `<div class="cell">${pathTile(row, col)}</div>`;
       }
     }
-    const legend = Object.entries(STATIONS).map(([k, s]) => `<div><i style="background:${stationColors[k]}"></i><b>${s.name}</b> ⚡${s.cost}｜${s.teach}</div>`).join('');
+    const legend = Object.entries(STATIONS).map(([k, s]) => `<div><i style="background:${stationColors[k]}"></i><b>${s.nameZh}</b> ⚡${s.cost}｜${s.teachZh}</div>`).join('');
     return `<section class="board-page"><div class="board">${cells}</div><div class="legend">${legend}</div></section>`;
   }
 
@@ -175,7 +175,7 @@
     return `<tr><td>起點 ${i + 1}</td><td>${E.routeLength(s, basicMission.steps)}</td><td>${bonus}</td><td>${RULES.startCharge + bonus}</td></tr>`;
   }).join('');
   const basicRules = `<section class="rule"><h2>電極棋局 基本版規則</h2>
-    <p><b>目標</b>：全員做「${basicMission.name}」，${RULES.rounds} 回合後分數最高的人獲勝。固定封閉式、厚絕緣層，沒有角色和事件卡。</p>
+    <p><b>目標</b>：全員做「${basicMission.nameZh}」，${RULES.rounds} 回合後分數最高的人獲勝。固定封閉式、厚絕緣層，沒有角色和事件卡。</p>
     <p><b>開局</b>：抽籤決定座位。每人絕緣層 ${thick.life} 點、分數 0，開局電荷由主持機計算：</p>
     <table><tr><th>起點</th><th>最短步數</th><th>補償電荷</th><th>開局電荷</th></tr>${seatRows}</table>
     <p><b>每回合</b></p>
@@ -186,7 +186,7 @@
     <table><tr><th>當回合第幾格</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
     <tr><td>電荷</td>${thick.stepCost.map((c) => `<td>${c}</td>`).join('')}</tr></table>
     <p><b>崩潰檢定</b>：走第 ${thick.checkFrom} 格時擲骰，電荷付了這一格一定走得到。擲出 1 或 2 就少 1 點絕緣層。歸零時下回合暫停一次，並恢復 1 點。修復每點 ${RULES.repairCost} 電荷。</p>
-    <p><b>站點</b>：依序完成${basicMission.steps.map((s) => `${STATIONS[s].name}（${STATIONS[s].cost} 電荷）`).join(' → ')}，每回合一站。檢測站要答對檢測題，答錯下回合可再付費重試。完成後從目前位置再做一次同一張任務。</p>
+    <p><b>站點</b>：依序完成${basicMission.steps.map((s) => `${STATIONS[s].nameZh}（${STATIONS[s].cost} 電荷）`).join(' → ')}，每回合一站。檢測站要答對檢測題，答錯下回合可再付費重試。完成後從目前位置再做一次同一張任務。</p>
     <p><b>計分</b>：中途站 ${RULES.stationScore} 分，完成檢測 ${RULES.detectScore} 分，共同題答對 ${RULES.correctScore} 分。同分並列第一，要分勝負時由主持人加賽一題搶答。</p>
     ${optionText('basic')}</section>`;
 
@@ -209,7 +209,7 @@
   }).join('');
   const hostCard = `<section class="host">
     <h2>主持人小卡 基本版</h2>
-    <p class="lead">全員把液滴依序送過${basicMission.steps.map((k) => STATIONS[k].name).join('、')}，${RULES.rounds} 回合後分數最高的人獲勝。</p>
+    <p class="lead">全員把液滴依序送過${basicMission.steps.map((k) => STATIONS[k].nameZh).join('、')}，${RULES.rounds} 回合後分數最高的人獲勝。</p>
 
     <div class="values">
       <div class="value" style="--c:#b8860b"><h3>電荷＝金錢</h3>
@@ -248,7 +248,7 @@
 
     <div class="block">${band('#2e9465', '站點與計分')}
       <table><tr><th>站點</th><th>電荷</th><th>要答題嗎</th><th>得分</th></tr>
-      ${basicMission.steps.map((k) => `<tr><td>${STATIONS[k].name}</td><td>${STATIONS[k].cost}</td><td>${k === 'DET' ? '要答檢測題' : '不用'}</td><td>${k === 'DET' ? `答對 +${RULES.detectScore}，答錯 −${RULES.detectFailPenalty}` : `+${RULES.stationScore}`}</td></tr>`).join('')}</table>
+      ${basicMission.steps.map((k) => `<tr><td>${STATIONS[k].nameZh}</td><td>${STATIONS[k].cost}</td><td>${k === 'DET' ? '要答檢測題' : '不用'}</td><td>${k === 'DET' ? `答對 +${RULES.detectScore}，答錯 −${RULES.detectFailPenalty}` : `+${RULES.stationScore}`}</td></tr>`).join('')}</table>
       <p>每回合最多完成一站。做完檢測後，從目前位置再做一次同一張任務。答錯扣分和全場第一個完成檢測 +${RULES.firstDetectBonus} 分都是可選規則，基本版預設前者開、後者關。</p>
     </div>
 
@@ -258,14 +258,14 @@
     </div>
   </section>`;
 
-  const chipCards = [...Object.values(CHIPS.arch), ...Object.values(CHIPS.insulator)].map((c) => card('晶片', c.name, c.effect, c.source));
-  const roleCards = ROLES.map((r) => card('角色', r.name, r.power, r.source));
-  const basicCards = [card('任務', basicMission.name, basicMission.steps.map((s) => STATIONS[s].name).join(' → '), basicMission.source)];
-  const missionCards = MISSIONS.map((m) => card('任務', m.name, m.steps.map((s) => STATIONS[s].name).join(' → '), m.source));
-  const eventCards = EVENTS.map((e) => card('事件', e.name, `${e.text}<br><small>${e.why}</small>`, e.source));
+  const chipCards = [...Object.values(CHIPS.arch), ...Object.values(CHIPS.insulator)].map((c) => card('晶片', c.nameZh, c.effectZh, c.source));
+  const roleCards = ROLES.map((r) => card('角色', r.nameZh, r.powerZh, r.source));
+  const basicCards = [card('任務', basicMission.nameZh, basicMission.steps.map((s) => STATIONS[s].nameZh).join(' → '), basicMission.source)];
+  const missionCards = MISSIONS.map((m) => card('任務', m.nameZh, m.steps.map((s) => STATIONS[s].nameZh).join(' → '), m.source));
+  const eventCards = EVENTS.map((e) => card('事件', e.nameZh, `${e.textZh}<br><small>${e.whyZh}</small>`, e.source));
 
   // 備援題本：手機壞掉時主持人照念
-  const sheet = `<section><h2>備援題本（主持人用，第一個選項是答案，念的時候自己換順序）</h2><ol class="sheet">${window.QUESTIONS.map((q) => `<li>${q.q}<br><b>${q.a[0]}</b>；<em>${q.a.slice(1).join('／')}（${q.lec} ${q.page}）</em></li>`).join('')}</ol></section>`;
+  const sheet = `<section><h2>備援題本（主持人用，第一個選項是答案，念的時候自己換順序）</h2><ol class="sheet">${window.QUESTIONS.map((q) => `<li>${q.q} <small>${q.zh.q}</small><br><b>${q.a[0]}（${q.zh.a[0]}）</b>；<em>${q.a.slice(1).join(' / ')}（${q.lec} ${q.page}）</em></li>`).join('')}</ol></section>`;
 
   document.getElementById('out').innerHTML = patternDefs + boardHtml() + basicRules + hostCard
     + answerBoard

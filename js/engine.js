@@ -141,8 +141,8 @@
   // 走一格。dieRoll 只有第 5 格才會用到
   function step(game, player, dieRoll) {
     const cost = nextStepCost(game, player);
-    if (cost === null) return { ok: false, reason: '本回合不能再走了' };
-    if (player.charge < cost) return { ok: false, reason: '電荷不夠' };
+    if (cost === null) return { ok: false, reason: 'No more steps this turn · 本回合不能再走了' };
+    if (player.charge < cost) return { ok: false, reason: 'Not enough charge · 電荷不夠' };
     const check = needsBreakdownCheck(player);
     player.charge -= cost;
     player.stepsThisTurn += 1;
@@ -183,10 +183,10 @@
   // 完成中途站。檢測站要走 payDetect＋settleDetect，因為要先答題
   function completeStation(game, player) {
     const type = nextStation(player);
-    if (!type || type === 'DET') return { ok: false, reason: '這一站要用檢測流程' };
-    if (player.stationThisTurn) return { ok: false, reason: '每回合只能完成一站' };
+    if (!type || type === 'DET') return { ok: false, reason: 'Use detection for this station · 這一站要用檢測流程' };
+    if (player.stationThisTurn) return { ok: false, reason: 'Only one station per turn · 每回合只能完成一站' };
     const cost = stationCost(game, player, type);
-    if (player.charge < cost) return { ok: false, reason: '電荷不夠' };
+    if (player.charge < cost) return { ok: false, reason: 'Not enough charge · 電荷不夠' };
     player.charge -= cost;
     player.stepIndex += 1;
     player.stationsDone += 1;
@@ -196,10 +196,10 @@
   }
 
   function payDetect(game, player) {
-    if (nextStation(player) !== 'DET') return { ok: false, reason: '還沒到檢測這一步' };
-    if (player.stationThisTurn) return { ok: false, reason: '每回合只能完成一站' };
+    if (nextStation(player) !== 'DET') return { ok: false, reason: 'Not at the detection step yet · 還沒到檢測這一步' };
+    if (player.stationThisTurn) return { ok: false, reason: 'Only one station per turn · 每回合只能完成一站' };
     const cost = stationCost(game, player, 'DET');
-    if (player.charge < cost) return { ok: false, reason: '電荷不夠' };
+    if (player.charge < cost) return { ok: false, reason: 'Not enough charge · 電荷不夠' };
     player.charge -= cost;
     player.stationThisTurn = true;
     return { ok: true, cost };
@@ -232,8 +232,8 @@
 
   function repair(player) {
     const cost = repairCost(player);
-    if (player.life >= player.maxLife) return { ok: false, reason: '絕緣層是滿的' };
-    if (player.charge < cost) return { ok: false, reason: '電荷不夠' };
+    if (player.life >= player.maxLife) return { ok: false, reason: 'Insulator is already full · 絕緣層是滿的' };
+    if (player.charge < cost) return { ok: false, reason: 'Not enough charge · 電荷不夠' };
     player.charge -= cost;
     player.life += 1;
     return { ok: true, cost };

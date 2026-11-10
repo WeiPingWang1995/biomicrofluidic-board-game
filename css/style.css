@@ -110,6 +110,11 @@ button.danger { color: var(--danger); }
 .option.right { border-color: var(--good); background: #17463a; }
 .option.wrong { opacity: 0.5; }
 .why { margin: 0; font-size: clamp(1.05rem, 1.8vw, 1.4rem); }
+/* 中文翻譯：英文為主，中文用小字跟在後面；zh-block 換到下一行 */
+.zh { color: var(--muted); font-size: 0.78em; font-weight: 400; }
+.zh-block { display: block; margin-top: 4px; }
+.option .zh-block { margin-top: 2px; }
+button .zh { color: inherit; opacity: 0.75; }
 /* 公布答案後的解說：圖在左、文字在右，窄螢幕改直排 */
 .question.compact { font-size: clamp(1.15rem, 1.9vw, 1.6rem); }
 .options.revealed .option { padding: 7px 12px; font-size: clamp(1rem, 1.4vw, 1.15rem); }

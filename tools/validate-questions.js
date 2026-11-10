@@ -16,10 +16,17 @@ QUESTIONS.forEach((item) => {
   if (new Set(item.a).size !== 4) problems.push(`${item.id} 選項重複`);
   if (![1, 2, 3].includes(item.diff)) problems.push(`${item.id} 難度錯誤`);
   if (item.a.some((text) => /以上皆|皆非/.test(text))) problems.push(`${item.id} 有以上皆是類選項`);
-  // 英文字母數比中文字數多，長度上限另外算
-  if (item.q.length > (item.en ? 120 : 60)) problems.push(`${item.id} 題目太長（${item.q.length} 字）`);
-  if (item.a.some((text) => text.length > (item.en ? 70 : 30))) problems.push(`${item.id} 選項太長，投影不好讀`);
-  if (item.en && (!Array.isArray(item.wrong) || item.wrong.length !== 3)) problems.push(`${item.id} 錯誤說明不是 3 段`);
+  // 英文為主：題目、選項用英文長度上限；中文翻譯放在 zh，另用中文長度上限
+  if (item.q.length > 120) problems.push(`${item.id} 題目太長（${item.q.length} 字）`);
+  if (item.a.some((text) => text.length > 70)) problems.push(`${item.id} 選項太長，投影不好讀`);
+  if (item.wrong && item.wrong.length !== 3) problems.push(`${item.id} 錯誤說明不是 3 段`);
+  const zh = item.zh || {};
+  ['topic', 'q', 'why'].forEach((key) => { if (!zh[key]) problems.push(`${item.id} 缺中文 ${key}`); });
+  if (!Array.isArray(zh.a) || zh.a.length !== 4) problems.push(`${item.id} 中文選項不是 4 個`);
+  else if (new Set(zh.a).size !== 4) problems.push(`${item.id} 中文選項重複`);
+  if (zh.q && zh.q.length > 60) problems.push(`${item.id} 中文題目太長（${zh.q.length} 字）`);
+  if (item.wrong && (!Array.isArray(zh.wrong) || zh.wrong.length !== 3)) problems.push(`${item.id} 中文錯誤說明不是 3 段`);
+  if (/[\u4e00-\u9fff]/.test(item.q + item.a.join('') + item.why)) problems.push(`${item.id} 英文欄位還有中文字`);
   if (item.a[0].length === Math.max(...item.a.map((t) => t.length))) longestCorrect += 1;
   count(item.lec, byLecture);
   count(item.diff, byDiff);

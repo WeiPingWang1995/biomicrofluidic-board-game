@@ -7,7 +7,11 @@
 - [x] 分裂（L8-17）、摺疊混合（L8-23）兩支影片：放進 `videos/`、填 `video` 欄位、加進 `sw.js`（v10）、做 `videos.html`
 - [x] 擊穿影片（L8-07）：`videos/dielectric-breakdown.mp4`，`sw.js` 升到 v11
 - [x] L8-01（`videos/contact-angle.mp4`）、L8-15（`videos/droplet-moving.mp4`）兩支影片，`sw.js` 升到 v12
-- [ ] 第 6 回合和檢測題還是中文，沒有圖片和影片
+- [x] 全部 86 題改成英文為主、附中文翻譯（`zh` 欄位），檢測題（個人題）也是英文（2026-11-10）
+- [x] 主持機介面英文為主、中文小字翻譯；`sw.js` 升到 v13（2026-11-10）
+- [ ] 第 6 回合和檢測題沒有圖片和影片
+- [ ] README 的截圖（`docs/images/`）還是舊的中文介面，要重拍
+- [ ] 開局電荷改成 4（2026-11-10，使用者指定）；還沒重跑 `tools/simulate.js`／`seat-analysis.js` 的平衡模擬
 - [ ] 題庫縮減（討論中的方案：共同 6＋最終 5＋備選 5，共 16 題）；題目用完時免答題完成檢測
 - [ ] 印刷備援題本、README、Notion 規則頁同步
 
